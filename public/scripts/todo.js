@@ -18,7 +18,7 @@ class Todo {
     const year = this.time.getFullYear();
     const time = `${day}, ${date} ${month}, ${year}`;
     return `
-    <div class="todoBox">
+    <div class="todoBox" id="${this.time.getTime()}">
       <div class="todoHeader">
         <h3>${this.title}</h3>
         <div class="infoStrap">
