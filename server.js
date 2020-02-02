@@ -1,6 +1,6 @@
-const { createServer } = require('http');
-const { info } = require('console');
-const { app } = require('./lib/handlers');
+const {createServer} = require('http');
+const {info} = require('console');
+const {app} = require('./lib/handlers');
 
 const main = function() {
   const [, , port] = process.argv;
