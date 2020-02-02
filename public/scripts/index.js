@@ -44,12 +44,32 @@ const removeOnBackspace = function(event) {
   }
 };
 
+const navigateDown = function(element){ 
+  const nextElement = element.nextElementSibling;
+  nextElement && nextElement.focus();
+};
+
+const navigateUp = function(element){ 
+  const previousElement = element.previousElementSibling;
+  previousElement && previousElement.focus();
+};
+
+const navigateThroughFields = function(event) {
+  const navigators = {
+    ArrowUp: navigateUp,
+    ArrowDown: navigateDown
+  };
+  const navigator = navigators[event.key];
+  navigator && navigator(event.target);
+};
+
 const getTaskField = function() {
   const taskField = document.createElement('input');
   taskField.type = 'text';
   taskField.className = 'taskField';
   taskField.placeholder = 'Task';
   taskField.onkeypress = addTaskFieldOnEnter;
+  taskField.onkeydown = navigateThroughFields;
   taskField.onkeyup = removeOnBackspace;
   return taskField;
 };
@@ -78,7 +98,8 @@ const toggleAddBoxVisibility = function() {
 };
 
 const attachEventHandlers = function(){
-  todoTitle.onkeydown = addTaskFieldOnEnter;
+  todoTitle.onkeypress = addTaskFieldOnEnter;
+  todoTitle.onkeydown = navigateThroughFields;
   getAddBtn().onclick = addToDo;
   getAddIcon().onclick = toggleAddBoxVisibility;
 };
