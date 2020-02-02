@@ -1,86 +1,86 @@
 /* eslint-disable no-undef */
 const getTaskFields = () => Array.from(document.querySelectorAll('.taskField'));
+const getTodoList = () => document.querySelector('.toDoList');
+const getAddBox = () => document.querySelector('.addBox');
+const getAddIcon = () => document.querySelector('.addIcon');
+const getAddBtn = () => document.querySelector('.addBtn');
 
 const getNewTasks = function() {
   const taskFields = getTaskFields();
-  const tasks = taskFields.map(taskField => {
-    const taskLine = document.createElement('p');
-    taskLine.innerText = taskField.value;
-    taskField.remove();
-    return taskLine;
-  });
-  const tasksWrapper = document.createElement('div');
-  tasksWrapper.className = 'tasks';
-  tasks.forEach(task => tasksWrapper.append(task));
-  return tasksWrapper;
+  const allEntries = taskFields.map(taskField => taskField.value);
+  return allEntries.filter(task => task !== '');
 };
 
-const generateTodoBox = function() {
-  const todoBox = document.createElement('div');
-  todoBox.className = 'todoBox';
-  const title = document.createElement('h3');
-  title.innerText = todoTitle.value;
+const removeEnteredValues = function(){
   todoTitle.value = '';
-  todoBox.append(title);
-  const tasksWrapper = getNewTasks();
-  todoBox.append(tasksWrapper);
-  return todoBox;
+  const taskFields = getTaskFields();
+  taskFields.forEach(taskField => taskField.remove());
 };
 
-const getTaskField = function() {
-  const inputElement = document.createElement('input');
-  inputElement.type = 'text';
-  inputElement.className = 'taskField';
-  inputElement.placeholder = 'Task';
-  inputElement.addEventListener('keydown', addTaskFieldOnEnter);
-  return inputElement;
+const restoreAddBox = function(){
+  removeEnteredValues();
+  closeAddBox();
+};
+
+const addToDo = function() {
+  const toDoList = getTodoList();
+  const todo = new Todo(todoTitle.value, getNewTasks());
+  toDoList.innerHTML = todo.toHtml() + toDoList.innerHTML;
+  restoreAddBox();
 };
 
 const addTaskFieldOnEnter = function(event) {
-  if(event.keyCode === 13 && event.target.value !== '') {
+  if(event.key === 'Enter' && event.target.value !== '') {
     const newTodoBox = document.querySelector('.newTodo');
     newTodoBox.append(getTaskField());
     newTodoBox.lastChild.focus();
   }
 };
 
-const addToDo = function(event) {
-  const toDoList = document.querySelector('.toDoList');
-  toDoList.insertBefore(generateTodoBox(), toDoList.firstChild);
-  const toggleIcon = document.querySelector('.add');
-  closeAddBox(event.target.parentElement, toggleIcon);
-};
-
-const openAddBox = function(addBox, toggleIcon){
-  addBox.classList.remove('collapsed');
-  addBox.classList.add('expanded');
-  toggleIcon.classList.remove('plus');
-  toggleIcon.classList.add('cross');
-};
-
-const closeAddBox = function(addBox, toggleIcon){
-  addBox.classList.remove('expanded');
-  addBox.classList.add('collapsed');
-  toggleIcon.classList.remove('cross');
-  toggleIcon.classList.add('plus');
-
-};
-
-const toogleAddBoxVisibility = function(event) {
-  const addBox = document.querySelector('.addBox');
-  if(addBox.className.includes('collapsed')) {
-    openAddBox(addBox, event.target);
-  }else {
-    closeAddBox(addBox, event.target);
+const removeOnBackspace = function(event) {
+  if(event.key === 'Backspace' && event.target.value === '') {
+    event.target.previousElementSibling.focus();
+    event.target.remove();
   }
 };
 
+const getTaskField = function() {
+  const taskField = document.createElement('input');
+  taskField.type = 'text';
+  taskField.className = 'taskField';
+  taskField.placeholder = 'Task';
+  taskField.onkeypress = addTaskFieldOnEnter;
+  taskField.onkeyup = removeOnBackspace;
+  return taskField;
+};
+
+const openAddBox = function(){
+  const addBox = getAddBox();
+  const addIcon = getAddIcon();
+  addBox.className = addBox.className.replace(/collapsed/g, 'expanded');
+  addIcon.className = addIcon.className.replace(/plus/g, 'cross');
+  todoTitle.focus();
+};
+
+const closeAddBox = function(){
+  const addBox = getAddBox();
+  const addIcon = getAddIcon();
+  addBox.className = addBox.className.replace(/expanded/g, 'collapsed');
+  addIcon.className = addIcon.className.replace(/cross/g, 'plus');
+};
+
+const toggleAddBoxVisibility = function() {
+  if(getAddBox().className.includes('collapsed')) {
+    openAddBox();
+    return;
+  }
+  closeAddBox();
+};
+
 const attachEventHandlers = function(){
-  const addBtn = document.querySelector('.addBtn');
-  addBtn.addEventListener('click', addToDo);
-  todoTitle.addEventListener('keydown', addTaskFieldOnEnter);
-  const addIcon = document.querySelector('.add');
-  addIcon.addEventListener('click', toogleAddBoxVisibility);
+  todoTitle.onkeydown = addTaskFieldOnEnter;
+  getAddBtn().onclick = addToDo;
+  getAddIcon().onclick = toggleAddBoxVisibility;
 };
 
 const main = function() {

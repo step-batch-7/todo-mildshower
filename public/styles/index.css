@@ -11,7 +11,7 @@
   margin: 30px 0;
 }
 
-.add {
+.addIcon {
   margin-left: 15px;
   height: 45px ;
   cursor: pointer
@@ -126,7 +126,7 @@ hr {
   outline: none;
   font-weight: 400;
   font-size: 15px;
-  padding: 5px 10px;
+  padding: 10px 5px 3px;
   margin-left: 20px;
   color: rgb(46, 46, 46);
 }
