@@ -3,4 +3,6 @@
 --done-- make folder structure
 --done-- add server and controller(app) components
 --done-- make a primitive structure to take data from web and show
+--done-- making html responsibility should be transferred to frontEnd
+-- populating previous to-dos will be responsibility of frontend
 ...
