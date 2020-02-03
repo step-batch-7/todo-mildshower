@@ -6,6 +6,7 @@
 --done-- making html responsibility should be transferred to frontEnd
 --done-- make done/undone feature of todo tasks
 --done-- make it enable to fetch previous to-dos and show them
+-- dynamic "remaining task count"
 -- introduce todoList class
 -- introduce task class
 -- add feature to remove particular task
