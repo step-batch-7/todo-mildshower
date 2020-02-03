@@ -180,7 +180,7 @@ const attachEventHandlers = function(){
 
 const fetchAndShowSavedItems = function(){
   sendXHRGetRequest('/records', 'json', function(todoList){
-    todoList.forEach(todo => projectTodo(todo));
+    todoList.reverse().forEach(todo => projectTodo(todo));
   });
 };
 
