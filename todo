@@ -5,7 +5,7 @@
 --done-- make a primitive structure to take data from web and show
 --done-- making html responsibility should be transferred to frontEnd
 --done-- make done/undone feature of todo tasks
--- make it enable to fetch previous to-dos and show them
+--done-- make it enable to fetch previous to-dos and show them
 -- introduce todoList class
 -- introduce task class
 -- add feature to remove particular task

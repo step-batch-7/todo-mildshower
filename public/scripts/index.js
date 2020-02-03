@@ -15,6 +15,16 @@ const sendXHRPostRequest = function(url, data, resType, callBack) {
   request.send(data);
 };
 
+const sendXHRGetRequest = function(url, resType, callBack) {
+  const request = new XMLHttpRequest();
+  request.open('GET', url);
+  resType && (request.responseType = resType);
+  request.onload = function(){
+    callBack && callBack(this.response);
+  };
+  request.send();
+};
+
 const getNewTasks = function() {
   const taskFields = getTaskFields();
   const allEntries = taskFields.map(taskField => taskField.value);
@@ -168,8 +178,15 @@ const attachEventHandlers = function(){
   getAddIcon().onclick = toggleAddBoxVisibility;
 };
 
+const fetchAndShowSavedItems = function(){
+  sendXHRGetRequest('/records', 'json', function(todoList){
+    todoList.forEach(todo => projectTodo(todo));
+  });
+};
+
 const main = function() {
   attachEventHandlers();
+  fetchAndShowSavedItems();
 };
 
 window.onload = main;
