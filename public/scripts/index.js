@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 const getTaskFields = () => Array.from(document.querySelectorAll('.taskField'));
-const getTaskItems = () => Array.from(document.querySelectorAll('.taskItem'));
 const getTodoList = () => document.querySelector('.toDoList');
 const getAddBox = () => document.querySelector('.addBox');
 const getAddIcon = () => document.querySelector('.addIcon');
@@ -9,7 +8,7 @@ const getAddBtn = () => document.querySelector('.addBtn');
 const sendXHRPostRequest = function(url, data, resType, callBack) {
   const request = new XMLHttpRequest();
   request.open('POST', url);
-  request.responseType = resType;
+  resType && (request.responseType = resType);
   request.onload = function(){
     callBack && callBack(this.response);
   };
@@ -37,30 +36,49 @@ const restoreAddBox = function(){
   closeAddBox();
 };
 
+const getParentTodoId = task => task.parentElement.parentElement.id;
+
+const toggleTaskStatusOnServer = function(todoId, taskId){
+  sendXHRPostRequest('/toggleTask', JSON.stringify({todoId, taskId}));
+};
+
+const toggleTaskStatus = function(){
+  toggleTaskStatusOnServer(getParentTodoId(event.target), event.target.id);
+  if(event.target.className.includes('checked')){
+    event.target.classList.remove('checked');
+    return;
+  }
+  event.target.classList.add('checked');
+};
+
 const generateTodoHtml = function(todo){
   const tasksHtml = todo.tasks.map(task => `
     <div class="taskItem" id="${task.id}">
       <div class="tickBox ${todo.done ? 'checked' : ''}" id="${task.id}"></div>
       <p>${task.name}</p>
     </div>`).join('\n');
-  return `
+  const div = document.createElement('div');
+  div.innerHTML = `
     <div class="todoBox" id="${todo.id}">
-      <div class="todoHeader">
-        <h3>${todo.title}</h3>
+      <div class="todoHeader"><h3>${todo.title}</h3>
         <div class="infoStrap">
           <span class="taskCount">${todo.tasks.length} left<span>
         </div>
       </div>
-      <div class="tasks">
-        ${tasksHtml}
-      </div>
+      <div class="tasks">${tasksHtml}</div>
     </div>`;
+  const todoHtml = div.firstElementChild;
+  const tasks = Array.from(todoHtml.children[1].children);
+  tasks.forEach(task => {
+    task.onclick = toggleTaskStatus;
+  });
+  return todoHtml;
 };
 
 const projectTodo = function(todo) {
   const todoHtml = generateTodoHtml(todo);
   const toDoList = getTodoList();
-  toDoList.innerHTML = todoHtml + toDoList.innerHTML;
+  toDoList.insertBefore(todoHtml, toDoList.firstChild);
 };
 
 const sendTodoToServer = function(todo){
