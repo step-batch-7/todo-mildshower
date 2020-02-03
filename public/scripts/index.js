@@ -5,10 +5,26 @@ const getAddBox = () => document.querySelector('.addBox');
 const getAddIcon = () => document.querySelector('.addIcon');
 const getAddBtn = () => document.querySelector('.addBtn');
 
+const sendXHRRequest = function(method, url, data, callBack) {
+  const request = new XMLHttpRequest();
+  request.open(method, url);
+  request.onload = function(){
+    callBack && callBack(this);
+  };
+  request.send(data);
+};
+
 const getNewTasks = function() {
   const taskFields = getTaskFields();
   const allEntries = taskFields.map(taskField => taskField.value);
   return allEntries.filter(task => task !== '');
+};
+
+const generateNewTodoJson = function() {
+  const title = todoTitle.value;
+  const time = new Date().getTime();
+  const tasks = getNewTasks();
+  return JSON.stringify({title, time, tasks});
 };
 
 const removeEnteredValues = function(){
@@ -22,10 +38,20 @@ const restoreAddBox = function(){
   closeAddBox();
 };
 
-const addToDo = function() {
+const projectTodo = function(todoHtml) {
   const toDoList = getTodoList();
-  const todo = new Todo(todoTitle.value, getNewTasks());
-  toDoList.innerHTML = todo.toHtml() + toDoList.innerHTML;
+  toDoList.innerHTML = todoHtml + toDoList.innerHTML;
+};
+
+const sendTodoToServer = function(todoJSON){
+  sendXHRRequest('POST', '/saveTodo', todoJSON, res => {
+    projectTodo(res.responseText);
+  });
+};
+
+const addToDo = function() {
+  const todoJSON = generateNewTodoJson();
+  sendTodoToServer(todoJSON);
   restoreAddBox();
 };
 
