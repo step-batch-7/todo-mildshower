@@ -11,7 +11,11 @@ class Todo {
   }
 
   toHtml() {
-    const tasksHtml = this.tasks.map(task => `<p>${task}</p>`).join('\n');
+    const tasksHtml = this.tasks.map(task => `
+    <div class="taskItem">
+      <div class="tickBox"></div>
+      <p>${task}</p>
+    </div>`).join('\n');
     const day = DAYS[this.time.getDay()];
     const month = MONTHS[this.time.getMonth()];
     const date = this.time.getDate();
