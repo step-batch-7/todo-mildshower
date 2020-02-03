@@ -4,5 +4,11 @@
 --done-- add server and controller(app) components
 --done-- make a primitive structure to take data from web and show
 --done-- making html responsibility should be transferred to frontEnd
--- populating previous to-dos will be responsibility of frontend
+--done-- make done/undone feature of todo tasks
+-- make it enable to fetch previous to-dos and show them
+-- introduce todoList class
+-- introduce task class
+-- add feature to remove particular task
+-- add feature to add more task to a pre-made todo
+-- add feature to remove todo from list
 ...
