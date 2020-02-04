@@ -62,8 +62,6 @@ const toggleTaskStatus = function(){
 };
 
 const generateTodoHtml = function(todo){
-  console.log(todo);
-  const statusClass = todo.done ? 'checked' : '';
   const tasksHtml = todo.tasks.map(task => `
     <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
       <div class="tickBox"></div>
