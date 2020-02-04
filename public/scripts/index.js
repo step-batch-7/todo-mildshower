@@ -4,6 +4,7 @@ const getTodoLists = () => document.querySelector('.toDoLists');
 const getAddBox = () => document.querySelector('.addBox');
 const getAddIcon = () => document.querySelector('.addIcon');
 const getAddBtn = () => document.querySelector('.addBtn');
+const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 
 const sendXHRPostRequest = function(url, data, resType, callBack) {
   const request = new XMLHttpRequest();
@@ -87,6 +88,15 @@ const deleteTaskItem = function(deleteBtn){
   taskItem.remove();
 };
 
+const deleteOnServer = function(todoListId){
+  sendXHRPostRequest('/deleteTodo', JSON.stringify({todoListId}));
+};
+
+const deleteTodo = function(todoListId){
+  deleteOnServer(todoListId);
+  getTodoBoxById(todoListId).remove();
+};
+
 const generateTodoListHtml = function(todoList){
   const tasksHtml = todoList.tasks.map(task => `
     <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
@@ -98,7 +108,11 @@ const generateTodoListHtml = function(todoList){
   const div = document.createElement('div');
   div.innerHTML = `
     <div class="todoListBox" id="${todoList.id}">
-      <div class="todoListHeader"><h2>${todoList.title}</h2>
+      <div class="todoListHeader"> 
+        <div class="titleBar">
+          <h2>${todoList.title}</h2>
+          <img onclick="deleteTodo('${todoList.id}')" src="images/del2.png" alt="delete">
+        </div>
         <div class="infoStrap">
           <span class="taskCount">${remainingTaskCount}</span> left
         </div>

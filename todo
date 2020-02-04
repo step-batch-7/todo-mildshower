@@ -10,7 +10,7 @@
 --done-- introduce todoListCollection class
 --done-- introduce task class
 --done-- add feature to remove particular task
+--done-- add feature to remove todo from list
 -- add feature to add more task to a pre-made todo
--- add feature to remove todo from list
 -- refactor index.js and separate functions in modules
 ...
