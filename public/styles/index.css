@@ -21,7 +21,7 @@
   margin: 0;
 }
 
-.todoBox {
+.todoListBox {
   border: 1px solid rgb(202, 202, 202);
   width: 17vw;
   height: 20vw;
@@ -38,18 +38,18 @@
   flex-grow: 1;
 }
 
-.todoBox:hover {
+.todoListBox:hover {
   box-shadow: 0 0 7px 1px rgb(170, 170, 170);
 }
 
-.todoHeader {
+.todoListHeader {
   background-image: linear-gradient(to Right, rgb(98, 83, 231), rgb(132, 132, 235));
   color: white;
   padding: 15px 20px 5px;
   flex-shrink: 0;
 }
 
-.todoHeader > h3 {
+.todoListHeader > h3 {
   margin: 0;
   font-weight: 100;
   line-height: 22px;
@@ -94,7 +94,7 @@
   pointer-events: none;
 }
 
-.toDoList {
+.toDoLists {
   display: flex;
   flex-wrap: wrap;
 }
@@ -146,7 +146,7 @@ hr {
   flex-flow: column;
 }
 
-#todoTitle {
+#todoListTitle {
   height: 20px;
   border: none;
   border-bottom: 2px solid rgb(98, 83, 231);

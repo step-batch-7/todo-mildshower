@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const getTaskFields = () => Array.from(document.querySelectorAll('.taskField'));
-const getTodoList = () => document.querySelector('.toDoList');
+const getTodoLists = () => document.querySelector('.toDoLists');
 const getAddBox = () => document.querySelector('.addBox');
 const getAddIcon = () => document.querySelector('.addIcon');
 const getAddBtn = () => document.querySelector('.addBtn');
@@ -31,12 +31,12 @@ const getNewTasks = function() {
   return allEntries.filter(task => task !== '');
 };
 
-const generateNewTodo = function() {
-  return {title: todoTitle.value, taskNames: getNewTasks()};
+const generateNewTodoList = function() {
+  return {title: todoListTitle.value, taskNames: getNewTasks()};
 };
 
 const removeEnteredValues = function(){
-  todoTitle.value = '';
+  todoListTitle.value = '';
   const taskFields = getTaskFields();
   taskFields.forEach(taskField => taskField.remove());
 };
@@ -48,12 +48,12 @@ const restoreAddBox = function(){
 
 const getParentTodo = task => task.parentElement.parentElement;
 
-const toggleTaskStatusOnServer = function(todoId, taskId){
-  sendXHRPostRequest('/toggleTask', JSON.stringify({todoId, taskId}));
+const toggleTaskStatusOnServer = function(todoListId, taskId){
+  sendXHRPostRequest('/toggleTask', JSON.stringify({todoListId, taskId}));
 };
 
-const updateLeftTaskCount = function( delta, todoId) {
-  const countBoard = document.querySelector(`[id="${todoId}"] .taskCount`);
+const updateLeftTaskCount = function( delta, todoListId) {
+  const countBoard = document.querySelector(`[id="${todoListId}"] .taskCount`);
   countBoard.innerText = +countBoard.innerText + delta;
 };
 
@@ -61,30 +61,30 @@ const increaseLeftTaskCount = updateLeftTaskCount.bind(null, 1);
 const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
 
 const toggleTaskStatus = function(){
-  const parentTodo = getParentTodo(event.target);
-  toggleTaskStatusOnServer(parentTodo.id, event.target.id);
+  const parentTodoList = getParentTodo(event.target);
+  toggleTaskStatusOnServer(parentTodoList.id, event.target.id);
   if(event.target.className.includes('checked')){
     event.target.classList.remove('checked');
-    increaseLeftTaskCount(parentTodo.id);
+    increaseLeftTaskCount(parentTodoList.id);
     return;
   }
   event.target.classList.add('checked');
-  decreaseLeftTaskCount(parentTodo.id);
+  decreaseLeftTaskCount(parentTodoList.id);
 };
 
 const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
 
-const generateTodoHtml = function(todo){
-  const tasksHtml = todo.tasks.map(task => `
+const generateTodoListHtml = function(todoList){
+  const tasksHtml = todoList.tasks.map(task => `
     <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
       <div class="tickBox"></div>
       <p>${task.name}</p>
     </div>`).join('\n');
-  const remainingTaskCount = getRemainingTaskCount(todo.tasks);
+  const remainingTaskCount = getRemainingTaskCount(todoList.tasks);
   const div = document.createElement('div');
   div.innerHTML = `
-    <div class="todoBox" id="${todo.id}">
-      <div class="todoHeader"><h3>${todo.title}</h3>
+    <div class="todoListBox" id="${todoList.id}">
+      <div class="todoListHeader"><h3>${todoList.title}</h3>
         <div class="infoStrap">
           <span class="taskCount">${remainingTaskCount}</span> left
         </div>
@@ -99,21 +99,21 @@ const generateTodoHtml = function(todo){
   return todoHtml;
 };
 
-const projectTodo = function(todo) {
-  const todoHtml = generateTodoHtml(todo);
-  const toDoList = getTodoList();
-  toDoList.insertBefore(todoHtml, toDoList.firstChild);
+const projectTodoList = function(todoList) {
+  const todoHtml = generateTodoListHtml(todoList);
+  const toDoLists = getTodoLists();
+  toDoLists.insertBefore(todoHtml, toDoLists.firstChild);
 };
 
-const sendTodoToServer = function(todo){
-  sendXHRPostRequest('/saveTodo', JSON.stringify(todo), 'json', res => {
-    projectTodo(res);
+const sendTodoListToServer = function(todoList){
+  sendXHRPostRequest('/addTodoList', JSON.stringify(todoList), 'json', res => {
+    projectTodoList(res);
   });
 };
 
-const addToDo = function() {
-  const newTodo = generateNewTodo();
-  sendTodoToServer(newTodo);
+const addTodoList = function() {
+  const newTodoList = generateNewTodoList();
+  sendTodoListToServer(newTodoList);
   restoreAddBox();
 };
 
@@ -167,7 +167,7 @@ const openAddBox = function(){
   const addIcon = getAddIcon();
   addBox.className = addBox.className.replace(/collapsed/g, 'expanded');
   addIcon.className = addIcon.className.replace(/plus/g, 'cross');
-  todoTitle.focus();
+  todoListTitle.focus();
 };
 
 const closeAddBox = function(){
@@ -186,15 +186,15 @@ const toggleAddBoxVisibility = function() {
 };
 
 const attachEventHandlers = function(){
-  todoTitle.onkeypress = addTaskFieldOnEnter;
-  todoTitle.onkeydown = navigateThroughFields;
-  getAddBtn().onclick = addToDo;
+  todoListTitle.onkeypress = addTaskFieldOnEnter;
+  todoListTitle.onkeydown = navigateThroughFields;
+  getAddBtn().onclick = addTodoList;
   getAddIcon().onclick = toggleAddBoxVisibility;
 };
 
 const fetchAndShowSavedItems = function(){
-  sendXHRGetRequest('/records', 'json', function(todoList){
-    todoList.reverse().forEach(todo => projectTodo(todo));
+  sendXHRGetRequest('/records', 'json', function(todoLists){
+    todoLists.reverse().forEach(todoList => projectTodoList(todoList));
   });
 };
 
