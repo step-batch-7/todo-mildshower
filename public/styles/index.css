@@ -194,8 +194,18 @@ hr {
   width: auto;
   display: none;
   cursor: pointer;
+  border-radius: 10px;
+}
+
+.taskDelBtn:hover {
+  transform: scale(1.3);
+  transition: 100ms;
 }
 
 .taskItem:hover > img {
   display: inline;
+}
+
+.taskItem:hover {
+  background: rgb(240, 240, 240);
 }

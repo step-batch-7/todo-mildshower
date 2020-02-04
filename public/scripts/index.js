@@ -83,6 +83,7 @@ const deleteTaskItem = function(deleteBtn){
   event.stopPropagation();
   const taskItem = deleteBtn.parentElement;
   deleteTaskOnServer(taskItem);
+  decreaseLeftTaskCount(getParentTodo(taskItem).id);
   taskItem.remove();
 };
 
