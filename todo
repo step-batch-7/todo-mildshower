@@ -8,7 +8,8 @@
 --done-- make it enable to fetch previous to-dos and show them
 --done-- dynamic "remaining task count"
 --done-- introduce todoListCollection class
--- introduce task class
+--done-- introduce task class
+-- refactor index.js and separate functions in modules
 -- add feature to remove particular task
 -- add feature to add more task to a pre-made todo
 -- add feature to remove todo from list
