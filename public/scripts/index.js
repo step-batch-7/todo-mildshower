@@ -61,30 +61,43 @@ const increaseLeftTaskCount = updateLeftTaskCount.bind(null, 1);
 const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
 
 const toggleTaskStatus = function(){
-  const parentTodoList = getParentTodo(event.target);
-  toggleTaskStatusOnServer(parentTodoList.id, event.target.id);
-  if(event.target.className.includes('checked')){
-    event.target.classList.remove('checked');
+  const parentTodoList = getParentTodo(this);
+  toggleTaskStatusOnServer(parentTodoList.id, this.id);
+  if(this.className.includes('checked')){
+    this.classList.remove('checked');
     increaseLeftTaskCount(parentTodoList.id);
     return;
   }
-  event.target.classList.add('checked');
+  this.classList.add('checked');
   decreaseLeftTaskCount(parentTodoList.id);
 };
 
 const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
+
+const deleteTaskOnServer = function(taskItem){
+  const [todoListId, taskId] = taskItem.id.split('_');
+  sendXHRPostRequest('/deleteTask', JSON.stringify({todoListId, taskId}));
+};
+
+const deleteTaskItem = function(deleteBtn){
+  event.stopPropagation();
+  const taskItem = deleteBtn.parentElement;
+  deleteTaskOnServer(taskItem);
+  taskItem.remove();
+};
 
 const generateTodoListHtml = function(todoList){
   const tasksHtml = todoList.tasks.map(task => `
     <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
       <div class="tickBox"></div>
       <p>${task.name}</p>
+      <img onclick="deleteTaskItem(this)" class="taskDelBtn" src="images/del.png">
     </div>`).join('\n');
   const remainingTaskCount = getRemainingTaskCount(todoList.tasks);
   const div = document.createElement('div');
   div.innerHTML = `
     <div class="todoListBox" id="${todoList.id}">
-      <div class="todoListHeader"><h3>${todoList.title}</h3>
+      <div class="todoListHeader"><h2>${todoList.title}</h2>
         <div class="infoStrap">
           <span class="taskCount">${remainingTaskCount}</span> left
         </div>
