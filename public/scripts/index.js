@@ -62,9 +62,11 @@ const toggleTaskStatus = function(){
 };
 
 const generateTodoHtml = function(todo){
+  console.log(todo);
+  const statusClass = todo.done ? 'checked' : '';
   const tasksHtml = todo.tasks.map(task => `
-    <div class="taskItem" id="${task.id}">
-      <div class="tickBox ${todo.done ? 'checked' : ''}" id="${task.id}"></div>
+    <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
+      <div class="tickBox"></div>
       <p>${task.name}</p>
     </div>`).join('\n');
   const div = document.createElement('div');
@@ -180,6 +182,7 @@ const attachEventHandlers = function(){
 
 const fetchAndShowSavedItems = function(){
   sendXHRGetRequest('/records', 'json', function(todoList){
+    console.log(todoList);
     todoList.reverse().forEach(todo => projectTodo(todo));
   });
 };
