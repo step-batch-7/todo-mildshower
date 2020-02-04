@@ -76,15 +76,18 @@ const toggleTaskStatus = function(){
 const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
 
 const deleteTaskOnServer = function(taskItem){
-  const [todoListId, taskId] = taskItem.id.split('_');
-  sendXHRPostRequest('/deleteTask', JSON.stringify({todoListId, taskId}));
+  const [todoListId] = taskItem.id.split('_');
+  const taskDeletionInfo = JSON.stringify({todoListId, taskId: taskItem.id});
+  sendXHRPostRequest('/deleteTask', taskDeletionInfo);
 };
 
 const deleteTaskItem = function(deleteBtn){
   event.stopPropagation();
   const taskItem = deleteBtn.parentElement;
   deleteTaskOnServer(taskItem);
-  decreaseLeftTaskCount(getParentTodo(taskItem).id);
+  if(!taskItem.className.includes('checked')) {
+    decreaseLeftTaskCount(getParentTodo(taskItem).id);
+  }
   taskItem.remove();
 };
 
@@ -121,6 +124,7 @@ const addTaskToTodo = function(todoListId, taskField) {
       todoTasks.append(taskHtml);
       taskHtml.scrollIntoView();
       taskField.value = '';
+      increaseLeftTaskCount(todoListId);
     });
   }
 };
