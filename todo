@@ -7,7 +7,7 @@
 --done-- make done/undone feature of todo tasks
 --done-- make it enable to fetch previous to-dos and show them
 --done-- dynamic "remaining task count"
--- introduce todoList class
+--done-- introduce todoListCollection class
 -- introduce task class
 -- add feature to remove particular task
 -- add feature to add more task to a pre-made todo
