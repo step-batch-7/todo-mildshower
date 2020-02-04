@@ -46,20 +46,33 @@ const restoreAddBox = function(){
   closeAddBox();
 };
 
-const getParentTodoId = task => task.parentElement.parentElement.id;
+const getParentTodo = task => task.parentElement.parentElement;
 
 const toggleTaskStatusOnServer = function(todoId, taskId){
   sendXHRPostRequest('/toggleTask', JSON.stringify({todoId, taskId}));
 };
 
+const updateLeftTaskCount = function( delta, todoId) {
+  const countBoard = document.querySelector(`[id="${todoId}"] .taskCount`);
+  countBoard.innerText = +countBoard.innerText + delta;
+};
+
+const increaseLeftTaskCount = updateLeftTaskCount.bind(null, 1);
+const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
+
 const toggleTaskStatus = function(){
-  toggleTaskStatusOnServer(getParentTodoId(event.target), event.target.id);
+  const parentTodo = getParentTodo(event.target);
+  toggleTaskStatusOnServer(parentTodo.id, event.target.id);
   if(event.target.className.includes('checked')){
     event.target.classList.remove('checked');
+    increaseLeftTaskCount(parentTodo.id);
     return;
   }
   event.target.classList.add('checked');
+  decreaseLeftTaskCount(parentTodo.id);
 };
+
+const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
 
 const generateTodoHtml = function(todo){
   const tasksHtml = todo.tasks.map(task => `
@@ -67,12 +80,13 @@ const generateTodoHtml = function(todo){
       <div class="tickBox"></div>
       <p>${task.name}</p>
     </div>`).join('\n');
+  const remainingTaskCount = getRemainingTaskCount(todo.tasks);
   const div = document.createElement('div');
   div.innerHTML = `
     <div class="todoBox" id="${todo.id}">
       <div class="todoHeader"><h3>${todo.title}</h3>
         <div class="infoStrap">
-          <span class="taskCount">${todo.tasks.length} left<span>
+          <span class="taskCount">${remainingTaskCount}</span> left
         </div>
       </div>
       <div class="tasks">${tasksHtml}</div>
@@ -180,7 +194,6 @@ const attachEventHandlers = function(){
 
 const fetchAndShowSavedItems = function(){
   sendXHRGetRequest('/records', 'json', function(todoList){
-    console.log(todoList);
     todoList.reverse().forEach(todo => projectTodo(todo));
   });
 };
