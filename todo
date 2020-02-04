@@ -11,6 +11,6 @@
 --done-- introduce task class
 --done-- add feature to remove particular task
 --done-- add feature to remove todo from list
--- add feature to add more task to a pre-made todo
+--done-- add feature to add more task to a pre-made todo
 -- refactor index.js and separate functions in modules
 ...

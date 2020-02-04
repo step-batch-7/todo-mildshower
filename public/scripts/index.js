@@ -97,6 +97,34 @@ const deleteTodo = function(todoListId){
   getTodoBoxById(todoListId).remove();
 };
 
+const addTaskToTodoOnServer = function(todoListId, taskName, callBack){
+  const newTaskInfo = JSON.stringify({todoListId, taskName});
+  sendXHRPostRequest('/addTask', newTaskInfo, 'json', ({taskId}) => {
+    callBack(taskId);
+  });
+};
+
+const addTaskToTodo = function(todoListId, taskField) {
+  if(event.keyCode === 13 && taskField.value !== ''){
+    addTaskToTodoOnServer(todoListId, taskField.value, (newTaskId) => {
+      const newTaskHtmlStr = `
+    <div class="taskItem" id="${newTaskId}">
+      <div class="tickBox"></div>
+      <p>${taskField.value}</p>
+      <img onclick="deleteTaskItem(this)" class="taskDelBtn" src="images/del.png">
+    </div>`;
+      const div = document.createElement('div');
+      div.innerHTML = newTaskHtmlStr;
+      const taskHtml = div.firstElementChild;
+      taskHtml.onclick = toggleTaskStatus;
+      const todoTasks = document.querySelector(`[id="${todoListId}"] .tasks`);
+      todoTasks.append(taskHtml);
+      taskHtml.scrollIntoView();
+      taskField.value = '';
+    });
+  }
+};
+
 const generateTodoListHtml = function(todoList){
   const tasksHtml = todoList.tasks.map(task => `
     <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
@@ -118,6 +146,7 @@ const generateTodoListHtml = function(todoList){
         </div>
       </div>
       <div class="tasks">${tasksHtml}</div>
+      <input type="text" onkeydown="addTaskToTodo('${todoList.id}', this)" placeholder="New Task.." class="newTaskInTodoBox">
     </div>`;
   const todoHtml = div.firstElementChild;
   const tasks = Array.from(todoHtml.children[1].children);
