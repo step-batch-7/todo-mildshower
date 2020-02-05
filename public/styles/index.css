@@ -134,12 +134,6 @@ body{
   transform: scale(0);
 }
 
-.expanded {
-  position: relative;
-  transition-duration: 200ms;
-  transform: scale(1);
-}
-
 .plus {
   transition-duration: 200ms;
   transform: rotate(0deg);
@@ -257,7 +251,7 @@ body{
   padding: 0 10px;
 }
 
-.full {
+.expanded {
   border-bottom: 3px solid rgb(98, 82, 230);
   width: 200px;
 }

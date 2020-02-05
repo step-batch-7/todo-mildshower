@@ -2,50 +2,74 @@
 const getTodoListsContainer = () => document.querySelector('.toDoLists');
 const getAddBtn = () => document.querySelector('.addIcon');
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
+const getTaskById = taskId => document.querySelector(`[id="${taskId}"]`);
+const getTaskCountField = todoId => {
+  return document.querySelector(`[id="${todoId}"] .taskCount`);
+};
 
-const generateNewTodoList = () => ( {title: newTitle.value});
+const getNewTodoListInfo = () => ({title: newTitle.value});
 
 const removeEnteredValues = () => {
   newTitle.value = '';
 };
 
-const restoreAddBox = function(){
+const openNewTitleField = function(){
+  newTitle.classList.add('expanded');
+  getAddBtn().classList.add('cross');
+  newTitle.focus();
+};
+
+const closeNewTitleField = function(){
+  newTitle.classList.remove('expanded');
+  getAddBtn().classList.remove('cross');
+};
+
+const toggleNewTitleVisibility = function() {
+  const addBtnClasses = getAddBtn().className;
+  addBtnClasses.includes('cross') && closeNewTitleField();
+  !addBtnClasses.includes('cross') && openNewTitleField();
+};
+
+const restoreTodoAddPanel = function(){
   removeEnteredValues();
   closeNewTitleField();
 };
 
-const getParentTodo = task => task.parentElement.parentElement;
-
 const updateLeftTaskCount = function( delta, todoListId) {
-  const countBoard = document.querySelector(`[id="${todoListId}"] .taskCount`);
+  const countBoard = getTaskCountField(todoListId);
   countBoard.innerText = +countBoard.innerText + delta;
 };
 
 const increaseLeftTaskCount = updateLeftTaskCount.bind(null, 1);
 const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
 
-const toggleTaskStatus = function(){
-  const parentTodoList = getParentTodo(this);
-  toggleTaskStateOnServer({todoListId: parentTodoList.id, taskId: this.id});
-  if(this.className.includes('checked')){
-    this.classList.remove('checked');
-    increaseLeftTaskCount(parentTodoList.id);
-    return;
-  }
-  this.classList.add('checked');
-  decreaseLeftTaskCount(parentTodoList.id);
+const markTaskAsDone = function(task, parentTodoId) {
+  task.classList.add('checked');
+  decreaseLeftTaskCount(parentTodoId);
 };
 
-const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
+const markTaskAsUndone = function(task, parentTodoId) {
+  task.classList.remove('checked');
+  increaseLeftTaskCount(parentTodoId);
+};
 
-const deleteTaskItem = function(deleteBtn){
+const toggleTaskState = function(parentTodoListId){
+  toggleTaskStateOnServer({todoListId: parentTodoListId, taskId: this.id});
+  const isDone = this.className.includes('checked');
+  isDone && markTaskAsUndone(this, parentTodoListId);
+  !isDone && markTaskAsDone(this, parentTodoListId);
+};
+
+const updateTaskCountOnDeletion = function(taskToDelete, parentTodoId){
+  const isUndoneTask = !taskToDelete.className.includes('checked');
+  isUndoneTask && decreaseLeftTaskCount(parentTodoId);
+};
+
+const deleteTaskItem = function(taskId, parentTodoId){
   event.stopPropagation();
-  const taskItem = deleteBtn.parentElement;
-  const [todoListId] = taskItem.id.split('_');
-  deleteTaskOnServer({todoListId, taskId: taskItem.id});
-  if(!taskItem.className.includes('checked')) {
-    decreaseLeftTaskCount(getParentTodo(taskItem).id);
-  }
+  const taskItem = getTaskById(taskId);
+  deleteTaskOnServer({todoListId: parentTodoId, taskId});
+  updateTaskCountOnDeletion(taskItem, parentTodoId);
   taskItem.remove();
 };
 
@@ -55,18 +79,18 @@ const deleteTodo = function(todoListId){
 };
 
 const addTaskToTodo = function(todoListId, taskField) {
-  if(event.keyCode === 13 && taskField.value !== ''){
+  if(event.key === 'Enter' && taskField.value !== ''){
     addTaskToTodoOnServer({todoListId, taskName: taskField.value}, ({taskId}) => {
       const newTaskHtmlStr = `
-    <div class="taskItem" id="${taskId}">
+      <div class="taskItem" id="${taskId}">
       <div class="tickBox"></div>
       <p>${taskField.value}</p>
-      <img onclick="deleteTaskItem(this)" class="taskDelBtn" src="images/del.png">
-    </div>`;
+      <img onclick="deleteTaskItem('${taskId}','${todoListId}')" class="taskDelBtn" src="images/del.png">
+      </div>`;
       const div = document.createElement('div');
       div.innerHTML = newTaskHtmlStr;
       const taskHtml = div.firstElementChild;
-      taskHtml.onclick = toggleTaskStatus;
+      taskHtml.onclick = toggleTaskState.bind(taskHtml, todoListId);
       const todoTasks = document.querySelector(`[id="${todoListId}"] .tasks`);
       todoTasks.append(taskHtml);
       taskHtml.scrollIntoView();
@@ -76,13 +100,15 @@ const addTaskToTodo = function(todoListId, taskField) {
   }
 };
 
+const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
+
 const generateTodoListHtml = function(todoList){
   const tasksHtml = todoList.tasks.map(task => `
-    <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
-      <div class="tickBox"></div>
-      <p>${task.name}</p>
-      <img onclick="deleteTaskItem(this)" class="taskDelBtn" src="images/del.png">
-    </div>`).join('\n');
+  <div class="taskItem ${task.done ? 'checked' : ''}" id="${task.id}">
+  <div class="tickBox"></div>
+  <p>${task.name}</p>
+  <img onclick="deleteTaskItem('${task.id}','${todoList.id}')" class="taskDelBtn" src="images/del.png">
+  </div>`).join('\n');
   const remainingTaskCount = getRemainingTaskCount(todoList.tasks);
   const div = document.createElement('div');
   div.innerHTML = `
@@ -102,47 +128,21 @@ const generateTodoListHtml = function(todoList){
   const todoHtml = div.firstElementChild;
   const tasks = Array.from(todoHtml.children[1].children);
   tasks.forEach(task => {
-    task.onclick = toggleTaskStatus;
+    task.onclick = toggleTaskState.bind(task, todoList.id);
   });
   return todoHtml;
 };
 
 const projectTodoList = function(todoList) {
   const todoHtml = generateTodoListHtml(todoList);
-  const toDoListCollection = getTodoListsContainer();
-  toDoListCollection.insertBefore(todoHtml, toDoListCollection.firstChild);
+  getTodoListsContainer().prepend(todoHtml);
 };
 
 const addTodoListOnEnter = function() {
   if(event.key === 'Enter' && event.target.value !== '') {
-    const newTodoList = generateNewTodoList();
-    addTodoListOnServer(newTodoList, projectTodoList);
-    restoreAddBox();
+    addTodoListOnServer(getNewTodoListInfo(), projectTodoList);
+    restoreTodoAddPanel();
   }
-  if(event.key === 'Escape') {
-    closeNewTitleField();
-  }
-};
-
-const openNewTitleField = function(){
-  document.querySelector('.title').classList.add('full');
-  const addBtn = getAddBtn();
-  addBtn.className = addBtn.className.replace(/plus/g, 'cross');
-  newTitle.focus();
-};
-
-const closeNewTitleField = function(){
-  document.querySelector('.title').classList.remove('full');
-  const addBtn = getAddBtn();
-  addBtn.className = addBtn.className.replace(/cross/g, 'plus');
-};
-
-const toggleNewTitleVisibility = function() {
-  if(getAddBtn().className.includes('plus')) {
-    openNewTitleField();
-    return;
-  }
-  closeNewTitleField();
 };
 
 const attachEventHandlers = function(){
