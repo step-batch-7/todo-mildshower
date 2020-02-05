@@ -43,7 +43,7 @@ const addTaskToTodo = function(todoListId, taskField) {
   }
 };
 
-const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
+const getLeftTaskCount = tasks => tasks.filter(task => !task.done).length;
 
 const attachHandlersToTodo = function(todo) {
   getTodoDelBtn(todo).onclick = deleteTodo.bind(null, todo.id);
@@ -53,7 +53,6 @@ const attachHandlersToTodo = function(todo) {
 
 const generateTodoListHtml = function(todoList){
   const tasksHtml = todoList.tasks.map(generateTaskItemHtml.bind(null, todoList.id));
-  const remainingTaskCount = getRemainingTaskCount(todoList.tasks);
   const todoHtml = document.createElement('div');
   todoHtml.innerHTML = `
       <div class="todoListHeader"> 
@@ -62,7 +61,7 @@ const generateTodoListHtml = function(todoList){
           <img src="images/del2.png" alt="delete">
         </div>
         <div class="infoStrap">
-          <span class="taskCount">${remainingTaskCount}</span> left
+          <span class="taskCount">${getLeftTaskCount(todoList.tasks)}</span> left
         </div>
       </div>
       <div class="tasks"></div>
