@@ -1,9 +1,7 @@
 /* eslint-disable no-undef */
 const getTaskFields = () => Array.from(document.querySelectorAll('.taskField'));
 const getTodoLists = () => document.querySelector('.toDoLists');
-const getAddBox = () => document.querySelector('.addBox');
 const getAddIcon = () => document.querySelector('.addIcon');
-const getAddBtn = () => document.querySelector('.addBtn');
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 
 const sendXHRPostRequest = function(url, data, resType, callBack) {
@@ -26,25 +24,15 @@ const sendXHRGetRequest = function(url, resType, callBack) {
   request.send();
 };
 
-const getNewTasks = function() {
-  const taskFields = getTaskFields();
-  const allEntries = taskFields.map(taskField => taskField.value);
-  return allEntries.filter(task => task !== '');
-};
+const generateNewTodoList = () => ( {title: newTitle.value});
 
-const generateNewTodoList = function() {
-  return {title: todoListTitle.value, taskNames: getNewTasks()};
-};
-
-const removeEnteredValues = function(){
-  todoListTitle.value = '';
-  const taskFields = getTaskFields();
-  taskFields.forEach(taskField => taskField.remove());
+const removeEnteredValues = () => {
+  newTitle.value = '';
 };
 
 const restoreAddBox = function(){
   removeEnteredValues();
-  closeAddBox();
+  closeNewTitleField();
 };
 
 const getParentTodo = task => task.parentElement.parentElement;
@@ -91,12 +79,12 @@ const deleteTaskItem = function(deleteBtn){
   taskItem.remove();
 };
 
-const deleteOnServer = function(todoListId){
+const deleteTodoOnServer = function(todoListId){
   sendXHRPostRequest('/deleteTodo', JSON.stringify({todoListId}));
 };
 
 const deleteTodo = function(todoListId){
-  deleteOnServer(todoListId);
+  deleteTodoOnServer(todoListId);
   getTodoBoxById(todoListId).remove();
 };
 
@@ -172,85 +160,41 @@ const sendTodoListToServer = function(todoList){
   });
 };
 
-const addTodoList = function() {
-  const newTodoList = generateNewTodoList();
-  sendTodoListToServer(newTodoList);
-  restoreAddBox();
-};
-
-const addTaskFieldOnEnter = function(event) {
+const addTodoListOnEnter = function() {
   if(event.key === 'Enter' && event.target.value !== '') {
-    const newTodoBox = document.querySelector('.newTodo');
-    newTodoBox.append(getNewTaskField());
-    newTodoBox.lastChild.focus();
+    const newTodoList = generateNewTodoList();
+    sendTodoListToServer(newTodoList);
+    restoreAddBox();
+  }
+  if(event.key === 'Escape') {
+    closeNewTitleField();
   }
 };
 
-const removeOnBackspace = function(event) {
-  if(event.key === 'Backspace' && event.target.value === '') {
-    event.target.previousElementSibling.focus();
-    event.target.remove();
-  }
-};
-
-const navigateDown = function(element){ 
-  const nextElement = element.nextElementSibling;
-  nextElement && nextElement.focus();
-};
-
-const navigateUp = function(element){ 
-  const previousElement = element.previousElementSibling;
-  previousElement && previousElement.focus();
-};
-
-const navigateThroughFields = function(event) {
-  const navigators = {
-    ArrowUp: navigateUp,
-    ArrowDown: navigateDown
-  };
-  const navigator = navigators[event.key];
-  navigator && navigator(event.target);
-};
-
-const getNewTaskField = function() {
-  const taskField = document.createElement('input');
-  taskField.type = 'text';
-  taskField.className = 'taskField';
-  taskField.placeholder = 'Task';
-  taskField.onkeypress = addTaskFieldOnEnter;
-  taskField.onkeydown = navigateThroughFields;
-  taskField.onkeyup = removeOnBackspace;
-  return taskField;
-};
-
-const openAddBox = function(){
-  const addBox = getAddBox();
+const openNewTitleField = function(){
+  document.querySelector('.title').classList.add('full');
   const addIcon = getAddIcon();
-  addBox.className = addBox.className.replace(/collapsed/g, 'expanded');
   addIcon.className = addIcon.className.replace(/plus/g, 'cross');
-  todoListTitle.focus();
+  newTitle.focus();
 };
 
-const closeAddBox = function(){
-  const addBox = getAddBox();
+const closeNewTitleField = function(){
+  document.querySelector('.title').classList.remove('full');
   const addIcon = getAddIcon();
-  addBox.className = addBox.className.replace(/expanded/g, 'collapsed');
   addIcon.className = addIcon.className.replace(/cross/g, 'plus');
 };
 
-const toggleAddBoxVisibility = function() {
-  if(getAddBox().className.includes('collapsed')) {
-    openAddBox();
+const toggleNewTitleVisibility = function() {
+  if(getAddIcon().className.includes('plus')) {
+    openNewTitleField();
     return;
   }
-  closeAddBox();
+  closeNewTitleField();
 };
 
 const attachEventHandlers = function(){
-  todoListTitle.onkeypress = addTaskFieldOnEnter;
-  todoListTitle.onkeydown = navigateThroughFields;
-  getAddBtn().onclick = addTodoList;
-  getAddIcon().onclick = toggleAddBoxVisibility;
+  newTitle.onkeydown = addTodoListOnEnter;
+  getAddIcon().onclick = toggleNewTitleVisibility;
 };
 
 const fetchAndShowSavedItems = function(){

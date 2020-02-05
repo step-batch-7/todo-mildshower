@@ -19,13 +19,13 @@ body{
 }
 
 .addIcon {
-  margin-left: 15px;
+  /* margin-left: 5px; */
   height: 45px ;
   cursor: pointer
 }
 
 .heading > h1{
-  margin: 0;
+  margin: 0 15px 0 0 ;
   background: linear-gradient(70deg,  rgb(63, 135, 194),rgb(98, 83, 231));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -246,3 +246,18 @@ body{
   flex-shrink: 0;
 }
 
+.title {
+  outline: none;
+  border: none;
+  font-size: 20px;
+  width: 0;
+  transition: width 200ms;
+  margin: 0;
+  font-weight: 100;
+  padding: 0 10px;
+}
+
+.full {
+  border-bottom: 3px solid rgb(98, 82, 230);
+  width: 200px;
+}
