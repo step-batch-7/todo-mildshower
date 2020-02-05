@@ -4,6 +4,10 @@ const getTodoListsContainer = () => document.querySelector('.toDoLists');
 const getAddBtn = () => document.querySelector('.addIcon');
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 const getTaskById = taskId => document.querySelector(`[id="${taskId}"]`);
+const getTodoDelBtn = todo => todo.querySelector('.todoListHeader img');
+const getTasksContainer = todoId => {
+  return document.querySelector(`[id="${todoId}"] .tasks`);
+};
 const getTaskCountField = todoId => {
   return document.querySelector(`[id="${todoId}"] .taskCount`);
 };
@@ -20,18 +24,13 @@ const collapseTitleField = function(){
 };
 
 const toggleNewTitleVisibility = function() {
-  const addBtnClasses = getAddBtn().className;
-  addBtnClasses.includes('cross') && collapseTitleField();
-  !addBtnClasses.includes('cross') && expandTitleField();
+  const isExpanded = getAddBtn().classList.contains('cross');
+  isExpanded && collapseTitleField();
+  !isExpanded && expandTitleField();
 };
 
 const removeEnteredValues = () => {
   newTitle.value = '';
-};
-
-const restoreTodoAddPanel = function(){
-  removeEnteredValues();
-  collapseTitleField();
 };
 
 const updateLeftTaskCount = function( delta, todoListId) {
@@ -43,7 +42,7 @@ const increaseLeftTaskCount = updateLeftTaskCount.bind(null, 1);
 const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
 
 const updateTaskCountOnDeletion = function(taskToDelete, parentTodoId){
-  const isUndoneTask = !taskToDelete.className.includes('checked');
+  const isUndoneTask = !taskToDelete.classList.contains('checked');
   isUndoneTask && decreaseLeftTaskCount(parentTodoId);
 };
 
@@ -59,14 +58,13 @@ const markTaskAsUndone = function(task, parentTodoId) {
 
 const toggleTaskState = function(parentTodoListId){
   toggleTaskStateOnServer({todoListId: parentTodoListId, taskId: this.id});
-  const isDone = this.className.includes('checked');
+  const isDone = this.classList.contains('checked');
   isDone && markTaskAsUndone(this, parentTodoListId);
   !isDone && markTaskAsDone(this, parentTodoListId);
 };
 
-const projectTodoList = function(todoList) {
-  const todoHtml = generateTodoListHtml(todoList);
-  getTodoListsContainer().prepend(todoHtml);
-};
-
 const getNewTodoListInfo = () => ({title: newTitle.value});
+
+const clearNewTaskField = taskField => {
+  taskField.value = '';
+};
