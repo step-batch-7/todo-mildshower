@@ -1,28 +1,7 @@
 /* eslint-disable no-undef */
-const getTaskFields = () => Array.from(document.querySelectorAll('.taskField'));
-const getTodoLists = () => document.querySelector('.toDoLists');
-const getAddIcon = () => document.querySelector('.addIcon');
+const getTodoListsContainer = () => document.querySelector('.toDoLists');
+const getAddBtn = () => document.querySelector('.addIcon');
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
-
-const sendXHRPostRequest = function(url, data, resType, callBack) {
-  const request = new XMLHttpRequest();
-  request.open('POST', url);
-  resType && (request.responseType = resType);
-  request.onload = function(){
-    callBack && callBack(this.response);
-  };
-  request.send(data);
-};
-
-const sendXHRGetRequest = function(url, resType, callBack) {
-  const request = new XMLHttpRequest();
-  request.open('GET', url);
-  resType && (request.responseType = resType);
-  request.onload = function(){
-    callBack && callBack(this.response);
-  };
-  request.send();
-};
 
 const generateNewTodoList = () => ( {title: newTitle.value});
 
@@ -37,10 +16,6 @@ const restoreAddBox = function(){
 
 const getParentTodo = task => task.parentElement.parentElement;
 
-const toggleTaskStatusOnServer = function(todoListId, taskId){
-  sendXHRPostRequest('/toggleTask', JSON.stringify({todoListId, taskId}));
-};
-
 const updateLeftTaskCount = function( delta, todoListId) {
   const countBoard = document.querySelector(`[id="${todoListId}"] .taskCount`);
   countBoard.innerText = +countBoard.innerText + delta;
@@ -51,7 +26,7 @@ const decreaseLeftTaskCount = updateLeftTaskCount.bind(null, -1);
 
 const toggleTaskStatus = function(){
   const parentTodoList = getParentTodo(this);
-  toggleTaskStatusOnServer(parentTodoList.id, this.id);
+  toggleTaskStateOnServer({todoListId: parentTodoList.id, taskId: this.id});
   if(this.className.includes('checked')){
     this.classList.remove('checked');
     increaseLeftTaskCount(parentTodoList.id);
@@ -63,43 +38,27 @@ const toggleTaskStatus = function(){
 
 const getRemainingTaskCount = tasks => tasks.filter(task => !task.done).length;
 
-const deleteTaskOnServer = function(taskItem){
-  const [todoListId] = taskItem.id.split('_');
-  const taskDeletionInfo = JSON.stringify({todoListId, taskId: taskItem.id});
-  sendXHRPostRequest('/deleteTask', taskDeletionInfo);
-};
-
 const deleteTaskItem = function(deleteBtn){
   event.stopPropagation();
   const taskItem = deleteBtn.parentElement;
-  deleteTaskOnServer(taskItem);
+  const [todoListId] = taskItem.id.split('_');
+  deleteTaskOnServer({todoListId, taskId: taskItem.id});
   if(!taskItem.className.includes('checked')) {
     decreaseLeftTaskCount(getParentTodo(taskItem).id);
   }
   taskItem.remove();
 };
 
-const deleteTodoOnServer = function(todoListId){
-  sendXHRPostRequest('/deleteTodo', JSON.stringify({todoListId}));
-};
-
 const deleteTodo = function(todoListId){
-  deleteTodoOnServer(todoListId);
+  deleteTodoOnServer({todoListId});
   getTodoBoxById(todoListId).remove();
-};
-
-const addTaskToTodoOnServer = function(todoListId, taskName, callBack){
-  const newTaskInfo = JSON.stringify({todoListId, taskName});
-  sendXHRPostRequest('/addTask', newTaskInfo, 'json', ({taskId}) => {
-    callBack(taskId);
-  });
 };
 
 const addTaskToTodo = function(todoListId, taskField) {
   if(event.keyCode === 13 && taskField.value !== ''){
-    addTaskToTodoOnServer(todoListId, taskField.value, (newTaskId) => {
+    addTaskToTodoOnServer({todoListId, taskName: taskField.value}, ({taskId}) => {
       const newTaskHtmlStr = `
-    <div class="taskItem" id="${newTaskId}">
+    <div class="taskItem" id="${taskId}">
       <div class="tickBox"></div>
       <p>${taskField.value}</p>
       <img onclick="deleteTaskItem(this)" class="taskDelBtn" src="images/del.png">
@@ -150,20 +109,14 @@ const generateTodoListHtml = function(todoList){
 
 const projectTodoList = function(todoList) {
   const todoHtml = generateTodoListHtml(todoList);
-  const toDoLists = getTodoLists();
-  toDoLists.insertBefore(todoHtml, toDoLists.firstChild);
-};
-
-const sendTodoListToServer = function(todoList){
-  sendXHRPostRequest('/addTodoList', JSON.stringify(todoList), 'json', res => {
-    projectTodoList(res);
-  });
+  const toDoListCollection = getTodoListsContainer();
+  toDoListCollection.insertBefore(todoHtml, toDoListCollection.firstChild);
 };
 
 const addTodoListOnEnter = function() {
   if(event.key === 'Enter' && event.target.value !== '') {
     const newTodoList = generateNewTodoList();
-    sendTodoListToServer(newTodoList);
+    addTodoListOnServer(newTodoList, projectTodoList);
     restoreAddBox();
   }
   if(event.key === 'Escape') {
@@ -173,19 +126,19 @@ const addTodoListOnEnter = function() {
 
 const openNewTitleField = function(){
   document.querySelector('.title').classList.add('full');
-  const addIcon = getAddIcon();
-  addIcon.className = addIcon.className.replace(/plus/g, 'cross');
+  const addBtn = getAddBtn();
+  addBtn.className = addBtn.className.replace(/plus/g, 'cross');
   newTitle.focus();
 };
 
 const closeNewTitleField = function(){
   document.querySelector('.title').classList.remove('full');
-  const addIcon = getAddIcon();
-  addIcon.className = addIcon.className.replace(/cross/g, 'plus');
+  const addBtn = getAddBtn();
+  addBtn.className = addBtn.className.replace(/cross/g, 'plus');
 };
 
 const toggleNewTitleVisibility = function() {
-  if(getAddIcon().className.includes('plus')) {
+  if(getAddBtn().className.includes('plus')) {
     openNewTitleField();
     return;
   }
@@ -194,18 +147,18 @@ const toggleNewTitleVisibility = function() {
 
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
-  getAddIcon().onclick = toggleNewTitleVisibility;
+  getAddBtn().onclick = toggleNewTitleVisibility;
 };
 
-const fetchAndShowSavedItems = function(){
-  sendXHRGetRequest('/records', 'json', function(todoLists){
+const loadSavedRecords = function(){
+  fetchSavedRecords('/records', function(todoLists){
     todoLists.reverse().forEach(todoList => projectTodoList(todoList));
   });
 };
 
 const main = function() {
   attachEventHandlers();
-  fetchAndShowSavedItems();
+  loadSavedRecords();
 };
 
 window.onload = main;
