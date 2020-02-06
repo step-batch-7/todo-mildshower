@@ -22,8 +22,8 @@ const sampleTodoRecords = [
   }
 ];
 
-describe('GET /records', function() {
-  it('should give all saved todos in json', function(done) {
+describe('GET', function() {
+  it('/records should give all saved todos in json', function(done) {
     request(app.serve.bind(app))
       .get('/records')
       .expect(200)
@@ -32,15 +32,24 @@ describe('GET /records', function() {
   });
 });
 
-describe('POST /records', function() {
+describe('POST', function() {
   afterEach(function(){
     writeFileSync('test/resources/todoList.json', JSON.stringify(sampleTodoRecords));
   });
-  it('should give all saved todos in json', function(done) {
+  it('/deleteTodo should delete the todo of the id', function(done) {
     request(app.serve.bind(app))
       .post('/deleteTodo')
       .send({todoListId: '0'})
       .set('Accept', 'application/json')
       .expect(200, done);
+  });
+  it('/addTodo should add a todo of given name', function(done) {
+    request(app.serve.bind(app))
+      .post('/addTodoList')
+      .send({title: 'New Todo'})
+      .set('Accept', 'application/json')
+      .expect('content-type', 'application/json')
+      .expect(/{"newTodoListId":"[0-9]+"}/)
+      .expect(201, done);
   });
 });
