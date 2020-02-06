@@ -23,8 +23,9 @@ const generateTaskItemHtml = function( parentTodoId, task) {
   const taskHtml = document.createElement('div');
   taskHtml.innerHTML = `
   <div class="tickBox"></div>
-  <p>${task.name}</p>
+  <p></p>
   <img class="taskDelBtn" src="images/del.png">`;
+  taskHtml.children[1].innerText = task.name;
   taskHtml.className = `taskItem ${task.done ? 'checked' : ''}`;
   taskHtml.id = task.id;
   attachHandlersToTask(taskHtml, parentTodoId);

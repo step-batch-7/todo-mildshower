@@ -21,9 +21,21 @@ body{
 }
 
 .addIcon {
-  /* margin-left: 5px; */
   height: 45px ;
+  transition-duration: 200ms;
   cursor: pointer
+}
+
+.addIcon:hover {
+  transform: scale(1.05);
+}
+
+.addIcon.cross:hover {
+  transform: scale(1.05) rotate(45deg);
+}
+
+.cross {
+  transform: rotate(45deg);
 }
 
 .heading > h1{
@@ -65,7 +77,7 @@ body{
 .todoListHeader  h2 {
   margin: 0 0 2px;
   font-weight: 100;
-  line-height: 22px;
+  line-height: 28px;
   flex-grow: 1;
 }
 
@@ -85,6 +97,8 @@ body{
   align-items: center;
   font-size: 20px;
   cursor: pointer;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .tickBox {
@@ -103,7 +117,7 @@ body{
 }
 
 .checked > p {
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .taskItem > p {
@@ -135,16 +149,6 @@ body{
 .collapsed {
   transition-duration: 200ms ease-out;
   transform: scale(0);
-}
-
-.plus {
-  transition-duration: 200ms;
-  transform: rotate(0deg);
-}
-
-.cross {
-  transition-duration: 200ms;
-  transform: rotate(45deg);
 }
 
 .addBox > h2 {
@@ -222,12 +226,15 @@ body{
 .titleBar{
   display: flex;
   align-items: center;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .titleBar img {
   height: 25px;
   width: auto;
   cursor: pointer;
+  padding-left: 10px;
 }
 
 .titleBar img:hover {

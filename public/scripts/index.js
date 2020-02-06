@@ -2,6 +2,7 @@
 const projectTodoList = function(todoList) {
   const todoHtml = generateTodoListHtml(todoList);
   getTodoListsContainer().prepend(todoHtml);
+  todoHtml.lastElementChild.focus();
 };
 
 const restoreTodoAddPanel = function(){
