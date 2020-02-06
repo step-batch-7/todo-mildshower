@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const deleteTaskItem = function(taskId, parentTodoId){
-  event.stopPropagation();
   const taskItem = getTaskById(taskId);
   deleteTaskOnServer({todoListId: parentTodoId, taskId});
   updateTaskCountOnDeletion(taskItem, parentTodoId);
@@ -15,11 +14,10 @@ const deleteTodo = function(todoListId){
 
 const modifyTodoTitle = function(title, todoListId){
   modifyTodoTitleOnServer({todoListId, newTitle: title.innerText});
-  // console.log(title.innerText, todoListId);
 };
 
 const attachHandlersToTask = function(task, parentTodoId){
-  task.onclick = toggleTaskState.bind(task, parentTodoId);
+  task.firstElementChild.onclick = toggleTaskState.bind(task, parentTodoId);
   const deleteIcon = task.lastElementChild;
   deleteIcon.onclick = deleteTaskItem.bind(null, task.id, parentTodoId);
 };
