@@ -19,6 +19,7 @@ const postDataToServer = requestToServer.bind(null, 'POST');
 const fetchSavedRecords = getDataFromServer.bind('/records');
 
 const toggleTaskStateOnServer = postDataToServer.bind(null, '/toggleTaskState');
+const modifyTodoTitleOnServer = postDataToServer.bind(null, '/modifyTodoTitle');
 const deleteTaskOnServer = postDataToServer.bind(null, '/deleteTask');
 const deleteTodoOnServer = postDataToServer.bind(null, '/deleteTodo');
 const addTaskToTodoOnServer = postDataToServer.bind(null, '/addTask');

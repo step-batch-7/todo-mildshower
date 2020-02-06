@@ -13,6 +13,11 @@ const deleteTodo = function(todoListId){
   getTodoBoxById(todoListId).remove();
 };
 
+const modifyTodoTitle = function(title, todoListId){
+  modifyTodoTitleOnServer({todoListId, newTitle: title.innerText});
+  // console.log(title.innerText, todoListId);
+};
+
 const attachHandlersToTask = function(task, parentTodoId){
   task.onclick = toggleTaskState.bind(task, parentTodoId);
   const deleteIcon = task.lastElementChild;
@@ -50,6 +55,8 @@ const attachHandlersToTodo = function(todo) {
   getTodoDelBtn(todo).onclick = deleteTodo.bind(null, todo.id);
   const newTaskField = todo.lastElementChild;
   newTaskField.onkeydown = addTaskToTodo.bind(null, todo.id, newTaskField);
+  const title = getTodoTitle(todo);
+  title.oninput = modifyTodoTitle.bind(null, title, todo.id);
 };
 
 const generateTodoListHtml = function(todoList){
@@ -58,7 +65,7 @@ const generateTodoListHtml = function(todoList){
   todoHtml.innerHTML = `
       <div class="todoListHeader"> 
         <div class="titleBar">
-          <h2>${todoList.title}</h2>
+          <h2 contentEditable="true">${todoList.title}</h2>
           <img src="images/del2.png" alt="delete">
         </div>
         <div class="infoStrap">

@@ -5,6 +5,7 @@ const getAddBtn = () => document.querySelector('.addIcon');
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 const getTaskById = taskId => document.querySelector(`[id="${taskId}"]`);
 const getTodoDelBtn = todo => todo.querySelector('.todoListHeader img');
+const getTodoTitle = todo => todo.querySelector('h2');
 const getTasksContainer = todoId => {
   return document.querySelector(`[id="${todoId}"] .tasks`);
 };
