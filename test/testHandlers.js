@@ -49,7 +49,7 @@ describe('GET', function() {
 });
 
 describe('POST', function() {
-  afterEach(function(){
+  after(function(){
     writeFileSync('test/resources/todoList.json', JSON.stringify(sampleTodoRecords));
   });
   it('/deleteTodo should delete the todo of the id', function(done) {
@@ -68,6 +68,34 @@ describe('POST', function() {
       .expect('content-type', 'application/json')
       .expect(/{"newTodoListId":"[0-9]+"}/)
       .expect(201, done);
+  });
+
+  it('/addTask should add a task to todo', function(done) {
+    request(app.serve.bind(app))
+      .post('/addTask')
+      .send({todoListId: '0', taskName: 'new Task'})
+      .set('Accept', 'application/json')
+      .expect('content-type', 'application/json')
+      .expect(/{"taskId":"[0-9]+_[0-9]"}/)
+      .expect(201, done);
+  });
+
+  it('/toggleTaskState should toggle specific task state', function(done) {
+    request(app.serve.bind(app))
+      .post('/toggleTaskState')
+      .send({todoListId: '0', taskId: '0_0'})
+      .set('Accept', 'application/json')
+      .expect('')
+      .expect(200, done);
+  });
+
+  it('/deleteTask delete a task from todo', function(done) {
+    request(app.serve.bind(app))
+      .post('/deleteTask')
+      .send({todoListId: '0', taskId: '0_0'})
+      .set('Accept', 'application/json')
+      .expect('')
+      .expect(200, done);
   });
 
   it('/<invalidFilePath> should give NotFound page with code 404', function(done) {
