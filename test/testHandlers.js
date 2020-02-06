@@ -30,6 +30,22 @@ describe('GET', function() {
       .expect('Content-Type', 'application/json')
       .expect(JSON.stringify(sampleTodoRecords), done);
   });
+
+  it('/<validFilePath> should give the file path', function(done) {
+    request(app.serve.bind(app))
+      .get('/index.html')
+      .expect(200)
+      .expect('Content-Type', 'text/html')
+      .expect(/To-do/, done);
+  });
+
+  it('/<invalidFilePath> should give NotFound page with code 404', function(done) {
+    request(app.serve.bind(app))
+      .get('/invalidPath.html')
+      .expect(404)
+      .expect('Content-Type', 'text/html')
+      .expect(/OOPS!/, done);
+  });
 });
 
 describe('POST', function() {
@@ -43,6 +59,7 @@ describe('POST', function() {
       .set('Accept', 'application/json')
       .expect(200, done);
   });
+
   it('/addTodo should add a todo of given name', function(done) {
     request(app.serve.bind(app))
       .post('/addTodoList')
@@ -51,5 +68,13 @@ describe('POST', function() {
       .expect('content-type', 'application/json')
       .expect(/{"newTodoListId":"[0-9]+"}/)
       .expect(201, done);
+  });
+
+  it('/<invalidFilePath> should give NotFound page with code 404', function(done) {
+    request(app.serve.bind(app))
+      .post('/invalidPath.html')
+      .expect(404)
+      .expect('Content-Type', 'text/html')
+      .expect(/OOPS!/, done);
   });
 });
