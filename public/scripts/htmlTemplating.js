@@ -12,21 +12,26 @@ const deleteTodo = function(todoListId){
   getTodoBoxById(todoListId).remove();
 };
 
-const modifyTodoTitle = function(title, todoListId){
-  modifyTodoTitleOnServer({todoListId, newTitle: title.innerText});
+const modifyTodoTitle = function(todoTitle, todoListId){
+  modifyTodoTitleOnServer({todoListId, title: todoTitle.innerText});
+};
+
+const modifyTaskName = function(task, todoListId){
+  modifyTaskNameOnServer({todoListId, taskId: task.id, name: task.innerText});
 };
 
 const attachHandlersToTask = function(task, parentTodoId){
   task.firstElementChild.onclick = toggleTaskState.bind(task, parentTodoId);
   const deleteIcon = task.lastElementChild;
   deleteIcon.onclick = deleteTaskItem.bind(null, task.id, parentTodoId);
+  task.children[1].oninput = modifyTaskName.bind(null, task, parentTodoId);
 };
 
 const generateTaskItemHtml = function( parentTodoId, task) {
   const taskHtml = document.createElement('div');
   taskHtml.innerHTML = `
   <div class="tickBox"></div>
-  <p></p>
+  <p contentEditable="true"></p>
   <img class="taskDelBtn" src="images/del.png">`;
   taskHtml.children[1].innerText = task.name;
   taskHtml.className = `taskItem ${task.done ? 'checked' : ''}`;

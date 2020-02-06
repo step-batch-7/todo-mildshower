@@ -125,6 +125,7 @@ body{
   flex-grow: 1;
   font-weight: 100;
   cursor: text;
+  outline: none;
 }
 
 .toDoLists {
