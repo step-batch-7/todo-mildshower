@@ -4,6 +4,7 @@ const requestToServer = function(method, targetPath, data, callBack) {
   const request = new XMLHttpRequest();
   request.open(method, targetPath);
   request.responseType = 'json';
+  data && request.setRequestHeader('Content-Type', 'application/json');
   request.onload = function(){
     callBack && callBack(this.response, this.status);
   };

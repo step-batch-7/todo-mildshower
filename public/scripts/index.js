@@ -11,7 +11,10 @@ const restoreTodoAddPanel = function(){
 
 const addTodoListOnEnter = function() {
   if(event.key === 'Enter' && event.target.value !== '') {
-    addTodoListOnServer(getNewTodoListInfo(), projectTodoList);
+    const newTodo = getNewTodoListInfo();
+    addTodoListOnServer(newTodo, ({newTodoListId}) => {
+      projectTodoList({title: newTodo.title, id: newTodoListId, tasks: []});
+    });
     restoreTodoAddPanel();
   }
 };
