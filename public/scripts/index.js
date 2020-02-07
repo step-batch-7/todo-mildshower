@@ -7,7 +7,7 @@ const projectTodoList = function(todoList) {
 
 const restoreTodoAddPanel = function(){
   removeEnteredValues();
-  collapseTitleField();
+  collapseNewTitle();
 };
 
 const addTodoListOnEnter = function() {

@@ -20,7 +20,7 @@ body{
   flex-shrink: 0;
 }
 
-.addIcon {
+/* .addIcon {
   height: 45px ;
   transition-duration: 200ms;
   cursor: pointer
@@ -28,7 +28,7 @@ body{
 
 .addIcon:hover {
   transform: scale(1.05);
-}
+} */
 
 .addIcon.cross:hover {
   transform: scale(1.05) rotate(45deg);
@@ -268,4 +268,59 @@ body{
 .expanded {
   border-bottom: 3px solid rgb(98, 82, 230);
   width: 200px;
+}
+
+
+
+
+
+.add{
+  height: 20px;
+  content:  url(../images/add.png);
+}
+
+.expansionToggler + label > div > input{
+  outline: none;
+  border: none;
+  line-height: 40px;
+  font-size: 20px;
+  color: whitesmoke;
+  font-weight: 100;
+  background: transparent;
+  visibility: hidden;
+  width: 0;
+  transition: 200ms;
+}
+
+.expansionToggler + label > div{
+  background: linear-gradient(to Right,  rgb(98, 83, 231),rgb(63, 135, 194));
+  margin: 0 5px 0 20px;
+  border-radius: 25px;
+  padding: 0 10px 0 10px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+}
+
+.expansionToggler{
+  display: none;
+}
+
+.expansionToggler:checked + label > div {
+  padding-left: 0;
+}
+
+.expansionToggler:checked + label > div > input {
+  visibility: visible;
+  padding: 0 15px;
+  width: 250px;
+}
+
+.expansionToggler:checked + label > div > div {
+  content:  url(../images/cross.png);
+}
+
+.expansionToggler + label > div > input::placeholder {
+  color: rgba(248, 248, 248,0.3);
 }

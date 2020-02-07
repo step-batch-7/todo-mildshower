@@ -12,10 +12,41 @@
 </head>
 <body>
   <div class="heading">
-  <h1>To-do </h1><input type="text" id="newTitle" class="title" placeholder="New To-do Title"><img class="addIcon" src="images/add.png" alt="add" title="add">
+  <h1>To-do </h1>
+  <!-- <input type="text" id="newTitle" class="title" placeholder="New To-do Title"><img class="addIcon" src="images/add.png" alt="add" title="add"> -->
+  <input type="checkbox" class="expansionToggler" id="expansionToggler">
+  <label for="expansionToggler" class="addIcon">
+    <div>
+      <input type="text" id="newTitle" placeholder="New To-do Title.."/>
+      <div class="add"></div>
+    </div>
+  </label>
 </div>
   <div class="toDoLists">
-
+    <div class="todoListBox" id="0">
+      <div class="todoListHeader"> 
+        <div class="titleBar">
+          <h2 contenteditable="true">new todo</h2>
+          <img src="images/del2.png" alt="delete">
+        </div>
+        <div class="infoStrap">
+          <span class="taskCount">4</span> left
+        </div>
+      </div>
+      <div class="tasks"><div class="taskItem " id="0_0">
+  <div class="tickBox"></div>
+  <p contenteditable="true">New Task 1</p>
+  <img class="taskDelBtn" src="images/del.png"></div><div class="taskItem " id="0_1">
+  <div class="tickBox"></div>
+  <p contenteditable="true">New Task 2</p>
+  <img class="taskDelBtn" src="images/del.png"></div><div class="taskItem " id="0_2">
+  <div class="tickBox"></div>
+  <p contenteditable="true">New task 3</p>
+  <img class="taskDelBtn" src="images/del.png"></div><div class="taskItem " id="0_3">
+  <div class="tickBox"></div>
+  <p contenteditable="true">New task 4</p>
+  <img class="taskDelBtn" src="images/del.png"></div></div>
+      <input type="text" placeholder="New Task.." class="newTaskInTodoBox"></div>
   </div>
 </body>
 </html>

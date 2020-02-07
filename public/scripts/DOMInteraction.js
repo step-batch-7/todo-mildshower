@@ -13,21 +13,12 @@ const getTaskCountField = todoId => {
   return document.querySelector(`[id="${todoId}"] .taskCount`);
 };
 
-const expandTitleField = function(){
-  newTitle.classList.add('expanded');
-  getAddBtn().classList.add('cross');
-  newTitle.focus();
-};
-
-const collapseTitleField = function(){
-  newTitle.classList.remove('expanded');
-  getAddBtn().classList.remove('cross');
+const collapseNewTitle = function(){
+  addTodoPanel.checked = false;
 };
 
 const toggleNewTitleVisibility = function() {
-  const isExpanded = getAddBtn().classList.contains('cross');
-  isExpanded && collapseTitleField();
-  !isExpanded && expandTitleField();
+  setTimeout(() => newTitle.focus(), 100);
 };
 
 const removeEnteredValues = () => {
