@@ -12,5 +12,15 @@
 --done-- add feature to remove particular task
 --done-- add feature to remove todo from list
 --done-- add feature to add more task to a pre-made todo
--- refactor index.js and separate functions in modules
+--done-- refactor index.js and separate functions in modules
+--done-- make todoList title editable
+--done-- make task items editable
+--done-- implement todoList search feature
+-- implement task search feature
+-- design a login page
+-- design a sign up page
+-- implement login feature
+---- use cookie implantation and session classes
+---- use user class to hold user context
+---- use cookies to determine session and ask for login if not logged in
 ...
