@@ -7,8 +7,6 @@ body{
   height: 100vh;
   display: flex;
   flex-flow: column;
-  /* filter: invert(1);
-  background-color: rgb(24, 24, 24); */
 }
 
 .heading {
@@ -20,30 +18,22 @@ body{
   flex-shrink: 0;
 }
 
-/* .addIcon {
-  height: 45px ;
-  transition-duration: 200ms;
-  cursor: pointer
-}
-
-.addIcon:hover {
-  transform: scale(1.05);
-} */
-
-.addIcon.cross:hover {
-  transform: scale(1.05) rotate(45deg);
-}
-
-.cross {
-  transform: rotate(45deg);
-}
-
 .heading > h1{
   font-size: 45px;
   margin: 0 15px 0 0 ;
   background: linear-gradient(70deg,  rgb(63, 135, 194),rgb(98, 83, 231));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.toDoLists {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  overflow-y: scroll;
+  row-gap: 20px;
+  align-content: flex-start;
+  flex-grow: 1;
 }
 
 .todoListBox {
@@ -58,14 +48,10 @@ body{
   transition: all .5s ease;
 }
 
-.tasks{
-  overflow: scroll;
-  flex-grow: 1;
-}
-
 .todoListBox:hover {
   box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
+
 
 .todoListHeader {
   background-image: linear-gradient(to Right, rgb(63, 135, 194),rgb(98, 83, 231));
@@ -89,12 +75,33 @@ body{
   border-bottom: 1px solid white;
 }
 
+.titleBar{
+  word-wrap: break-word;
+  word-break: break-all;
+  flex-grow: 1;
+}
+
 .infoStrap {
   opacity: 0.6;
   font-weight: 100;
   font-size: 10px;
-  /* padding: 0 4px; */
   cursor: default;
+}
+
+.todoListHeader img {
+  height: 25px;
+  width: auto;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.todoListHeader img:hover {
+  transform: scale(1.2);
+}
+
+.tasks{
+  overflow: scroll;
+  flex-grow: 1;
 }
 
 .taskItem {
@@ -109,23 +116,19 @@ body{
   word-break: break-all;
 }
 
+.taskItem:hover {
+  border-left: 3px solid rgb(63, 135, 194);
+  background: rgb(245, 245, 245);
+}
+
 .tickBox {
   border: 2px solid rgb(63, 135, 194);
-  height: 10px;
-  width: 10px;
+  height: 11px;
+  width: 11px;
   border-radius: 3px;
   margin-right: 10px;
   flex-shrink: 0;
   cursor: pointer;
-}
-
-.checked .tickBox {
-  background-color: rgb(63, 135, 194);
-  box-shadow: inset 0 0 0 1px white;
-}
-
-.checked > p {
-  opacity: 0.3;
 }
 
 .taskItem > p {
@@ -143,80 +146,13 @@ body{
   border-bottom: 1px solid rgb(216, 216, 216);
 }
 
-.toDoLists {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  overflow-y: scroll;
-  row-gap: 20px;
-  align-content: flex-start;
-  flex-grow: 1;
+.checked > p {
+  opacity: 0.3;
 }
 
-.addBox {
-  width: 20%;
-  border: 2px solid rgb(134, 122, 243);
-  border-radius: 15px;
-  padding: 15px 25px;
-  background: white;
-  overflow: hidden;
-  position: absolute;
-  flex-shrink: 0;
-}
-
-.collapsed {
-  transition-duration: 200ms ease-out;
-  transform: scale(0);
-}
-
-.addBox > h2 {
-  margin: 5px;
-  color: rgb(98, 83, 231);
-}
-
-.newTodo {
-  display: flex;
-  flex-flow: column;
-}
-
-#todoListTitle {
-  height: 20px;
-  border: none;
-  border-bottom: 2px solid rgb(98, 83, 231);
-  outline: none;
-  font-weight: 600;
-  font-size: 20px;
-  padding: 5px 10px;
-  color: rgb(27, 27, 27);
-}
-
-.taskField {
-  height: 15px;
-  border: none;
-  border-bottom: 1px solid rgb(98, 83, 231);
-  outline: none;
-  font-weight: 400;
-  font-size: 15px;
-  padding: 10px 5px 3px;
-  margin-left: 20px;
-  color: rgb(46, 46, 46);
-}
-
-.addBtn {
-  margin: 10px;
-  padding: 5px 10px;
-  font-weight: 600;
-  background: none;
-  border: 2px solid rgb(98, 83, 231);
-  border-radius: 8px;
-  color: rgb(98, 83, 231);
-  cursor: pointer;
-  outline: none;
-}
-
-.addBtn:hover, .addBtn:focus {
-  background-color: rgb(98, 83, 231);
-  color: white;
+.checked .tickBox {
+  background-color: rgb(63, 135, 194);
+  box-shadow: inset 0 0 0 1px white;
 }
 
 .taskDelBtn{
@@ -236,30 +172,6 @@ body{
   visibility: visible;
 }
 
-.taskItem:hover {
-  border-left: 3px solid rgb(63, 135, 194);
-  background: rgb(245, 245, 245);
-}
-
-.titleBar{
-  /* display: flex; */
-  /* align-items: center; */
-  word-wrap: break-word;
-  word-break: break-all;
-  flex-grow: 1;
-}
-
-.todoListHeader img {
-  height: 25px;
-  width: auto;
-  cursor: pointer;
-  padding-left: 10px;
-}
-
-.todoListHeader img:hover {
-  transform: scale(1.2);
-}
-
 .newTaskInTodoBox {
   border: none;
   height: 30px;
@@ -271,29 +183,9 @@ body{
   flex-shrink: 0;
 }
 
-.title {
-  outline: none;
-  border: none;
-  font-size: 20px;
-  width: 0;
-  transition: width 200ms;
-  margin: 0;
-  font-weight: 100;
-  padding: 0 10px;
-}
-
-.expanded {
-  border-bottom: 3px solid rgb(98, 82, 230);
-  width: 200px;
-}
-
 .hidden{
   display: none;
 }
-
-
-
-
 
 .add{
   height: 20px;
