@@ -56,6 +56,10 @@ body{
   flex-flow: column;
 }
 
+.hidden{
+  display: none;
+}
+
 .tasks{
   overflow: scroll;
   flex-grow: 1;
@@ -279,6 +283,11 @@ body{
   content:  url(../images/add.png);
 }
 
+.search{
+  height: 20px;
+  content:  url(../images/search.png);
+}
+
 .expansionToggler + label > div > input{
   outline: none;
   border: none;
@@ -293,7 +302,7 @@ body{
 }
 
 .expansionToggler + label > div{
-  background: linear-gradient(to Right,  rgb(98, 83, 231),rgb(63, 135, 194));
+  background: linear-gradient(45deg,rgb(63, 135, 194),rgb(98, 83, 231));
   margin: 0 5px 0 20px;
   border-radius: 25px;
   padding: 0 10px 0 10px;

@@ -1,4 +1,13 @@
 /* eslint-disable no-undef */
+const filterSearchedTodoLists = function(){
+  const allTodoLists = getAllTodoLists();
+  allTodoLists.forEach(todo => {
+    todo.classList.remove('hidden');
+    const isMatchedTodo = getTodoTitle(todo).innerText.includes(todoSearchBar.value);
+    !isMatchedTodo && todo.classList.add('hidden');
+  });
+};
+
 const projectTodoList = function(todoList) {
   const todoHtml = generateTodoListHtml(todoList);
   getTodoListsContainer().prepend(todoHtml);
@@ -22,7 +31,9 @@ const addTodoListOnEnter = function() {
 
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
-  getAddBtn().onclick = toggleNewTitleVisibility;
+  addIcon.onclick = focusOnNewTitleField;
+  todoSearchIcon.onclick = focusOnTodoSearchField;
+  todoSearchBar.onkeyup = filterSearchedTodoLists;
 };
 
 const loadSavedRecords = function(){

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const getTodoListsContainer = () => document.querySelector('.toDoLists');
-const getAddBtn = () => document.querySelector('.addIcon');
+const getAllTodoLists = () => Array.from(document.querySelectorAll('.todoListBox'));
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 const getTaskById = taskId => document.querySelector(`[id="${taskId}"]`);
 const getTodoDelBtn = todo => todo.querySelector('.todoListHeader img');
@@ -17,8 +17,12 @@ const collapseNewTitle = function(){
   addTodoPanel.checked = false;
 };
 
-const toggleNewTitleVisibility = function() {
+const focusOnNewTitleField = function() {
   setTimeout(() => newTitle.focus(), 100);
+};
+
+const focusOnTodoSearchField = function() {
+  setTimeout(() => todoSearchBar.focus(), 100);
 };
 
 const removeEnteredValues = () => {
