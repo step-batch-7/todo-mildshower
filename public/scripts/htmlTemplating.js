@@ -78,11 +78,11 @@ const generateTodoListHtml = function(todoList){
       <div class="todoListHeader"> 
         <div class="titleBar">
           <h2 contentEditable="true">${todoList.title}</h2>
-          <img src="images/del2.png" alt="delete">
+          <div class="infoStrap">
+            <span class="taskCount">${getLeftTaskCount(todoList.tasks)}</span> left
+          </div>
         </div>
-        <div class="infoStrap">
-          <span class="taskCount">${getLeftTaskCount(todoList.tasks)}</span> left
-        </div>
+        <img src="images/del2.png" alt="delete">
       </div>
       <div class="tasks"></div>
       <input type="text" placeholder="New Task.." class="newTaskInTodoBox">`;

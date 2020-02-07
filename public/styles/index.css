@@ -39,6 +39,7 @@ body{
 }
 
 .heading > h1{
+  font-size: 45px;
   margin: 0 15px 0 0 ;
   background: linear-gradient(70deg,  rgb(63, 135, 194),rgb(98, 83, 231));
   -webkit-background-clip: text;
@@ -69,16 +70,16 @@ body{
 .todoListHeader {
   background-image: linear-gradient(to Right, rgb(63, 135, 194),rgb(98, 83, 231));
   color: white;
-  padding: 15px 20px 5px;
+  padding: 10px 20px 10px;
   flex-shrink: 0;
   align-items: center;
+  display: flex;
 }
 
 .todoListHeader  h2 {
   margin: 0;
   font-weight: 100;
   line-height: 28px;
-  flex-grow: 1;
   outline: none;
   border-bottom: 1px solid rgba(255, 255, 255,0);
 }
@@ -92,7 +93,7 @@ body{
   opacity: 0.6;
   font-weight: 100;
   font-size: 10px;
-  padding: 0 4px;
+  /* padding: 0 4px; */
   cursor: default;
 }
 
@@ -241,20 +242,21 @@ body{
 }
 
 .titleBar{
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   word-wrap: break-word;
   word-break: break-all;
+  flex-grow: 1;
 }
 
-.titleBar img {
+.todoListHeader img {
   height: 25px;
   width: auto;
   cursor: pointer;
   padding-left: 10px;
 }
 
-.titleBar img:hover {
+.todoListHeader img:hover {
   transform: scale(1.2);
 }
 
