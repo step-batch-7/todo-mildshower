@@ -8,6 +8,11 @@ const filterSearchedTodoLists = function(){
   });
 };
 
+const resetSearch = function(){
+  focusAndResetSearchField();
+  filterSearchedTodoLists();
+};
+
 const projectTodoList = function(todoList) {
   const todoHtml = generateTodoListHtml(todoList);
   getTodoListsContainer().prepend(todoHtml);
@@ -32,7 +37,7 @@ const addTodoListOnEnter = function() {
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
   addIcon.onclick = focusOnNewTitleField;
-  todoSearchIcon.onclick = focusOnTodoSearchField;
+  todoSearchIcon.onclick = resetSearch;
   todoSearchBar.onkeyup = filterSearchedTodoLists;
 };
 

@@ -21,7 +21,8 @@ const focusOnNewTitleField = function() {
   setTimeout(() => newTitle.focus(), 100);
 };
 
-const focusOnTodoSearchField = function() {
+const focusAndResetSearchField = function() {
+  todoSearchBar.value = '';
   setTimeout(() => todoSearchBar.focus(), 100);
 };
 
