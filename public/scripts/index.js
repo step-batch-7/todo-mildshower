@@ -8,9 +8,24 @@ const filterSearchedTodoLists = function(){
   });
 };
 
-const resetSearch = function(){
-  focusAndResetSearchField();
+const resetTodoSearch = function(){
+  focusAndResetTodoSearchField();
   filterSearchedTodoLists();
+};
+
+const filterSearchedTasks = function(){
+  const allTasks = getAllTasks();
+  console.log(allTasks);
+  allTasks.forEach(task => {
+    task.classList.remove('hidden');
+    const isMatchedTask = getTaskName(task).innerText.includes(taskSearchBar.value);
+    !isMatchedTask && task.classList.add('hidden');
+  });
+};
+
+const resetTaskSearch = function(){
+  focusAndResetTaskSearchField();
+  filterSearchedTasks();
 };
 
 const projectTodoList = function(todoList) {
@@ -37,8 +52,10 @@ const addTodoListOnEnter = function() {
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
   addIcon.onclick = focusOnNewTitleField;
-  todoSearchIcon.onclick = resetSearch;
+  todoSearchIcon.onclick = resetTodoSearch;
   todoSearchBar.onkeyup = filterSearchedTodoLists;
+  taskSearchIcon.onclick = resetTaskSearch;
+  taskSearchBar.onkeydown = filterSearchedTasks;
 };
 
 const loadSavedRecords = function(){

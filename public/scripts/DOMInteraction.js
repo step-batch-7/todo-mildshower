@@ -2,10 +2,12 @@
 /* eslint-disable no-unused-vars */
 const getTodoListsContainer = () => document.querySelector('.toDoLists');
 const getAllTodoLists = () => Array.from(document.querySelectorAll('.todoListBox'));
+const getAllTasks = () => Array.from(document.querySelectorAll('.taskItem'));
 const getTodoBoxById = todoId => document.querySelector(`[id="${todoId}"]`);
 const getTaskById = taskId => document.querySelector(`[id="${taskId}"]`);
 const getTodoDelBtn = todo => todo.querySelector('.todoListHeader img');
 const getTodoTitle = todo => todo.querySelector('h2');
+const getTaskName = task => task.querySelector('p');
 const getTasksContainer = todoId => {
   return document.querySelector(`[id="${todoId}"] .tasks`);
 };
@@ -21,7 +23,12 @@ const focusOnNewTitleField = function() {
   setTimeout(() => newTitle.focus(), 100);
 };
 
-const focusAndResetSearchField = function() {
+const focusAndResetTaskSearchField = function(){
+  taskSearchBar.value = '';
+  setTimeout(() => taskSearchBar.focus(), 100);
+};
+
+const focusAndResetTodoSearchField = function() {
   todoSearchBar.value = '';
   setTimeout(() => todoSearchBar.focus(), 100);
 };

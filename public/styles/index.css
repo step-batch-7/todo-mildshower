@@ -48,16 +48,13 @@ body{
 .todoListBox {
   border: 1px solid rgb(202, 202, 202);
   width: 300px;
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 0 2px 1px rgb(223, 223, 223);
+  box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
   margin: 15px;
   display: flex;
   flex-flow: column;
-}
-
-.hidden{
-  display: none;
+  transition: all .5s ease;
 }
 
 .tasks{
@@ -66,7 +63,7 @@ body{
 }
 
 .todoListBox:hover {
-  box-shadow: 0 0 7px 1px rgb(170, 170, 170);
+  box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
 
 .todoListHeader {
@@ -152,6 +149,7 @@ body{
   overflow-y: scroll;
   row-gap: 20px;
   align-content: flex-start;
+  flex-grow: 1;
 }
 
 .addBox {
@@ -287,6 +285,10 @@ body{
   width: 200px;
 }
 
+.hidden{
+  display: none;
+}
+
 
 
 
@@ -296,9 +298,14 @@ body{
   content:  url(../images/add.png);
 }
 
-.search{
+.todoSearch{
   height: 20px;
-  content:  url(../images/search.png);
+  content:  url(../images/todoSearch.png);
+}
+
+.taskSearch{
+  height: 20px;
+  content:  url(../images/taskSearch.png);
 }
 
 .expansionToggler + label > div > input{
