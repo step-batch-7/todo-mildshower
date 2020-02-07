@@ -14,17 +14,25 @@ const deleteTodo = function(todoListId){
 
 const modifyTodoTitle = function(todoTitle, todoListId){
   modifyTodoTitleOnServer({todoListId, title: todoTitle.innerText});
+  todoTitle.innerText += '';
 };
 
-const modifyTaskName = function(task, todoListId){
-  modifyTaskNameOnServer({todoListId, taskId: task.id, name: task.innerText});
+const modifyTaskName = function(task, todoListId, taskName){
+  modifyTaskNameOnServer({todoListId, taskId: task.id, name: taskName.innerText});
+  taskName.innerText += '';
+};
+
+const blurOnEnter = function(element){
+  event.key === 'Enter' && element.blur();
 };
 
 const attachHandlersToTask = function(task, parentTodoId){
   task.firstElementChild.onclick = toggleTaskState.bind(task, parentTodoId);
   const deleteIcon = task.lastElementChild;
   deleteIcon.onclick = deleteTaskItem.bind(null, task.id, parentTodoId);
-  task.children[1].oninput = modifyTaskName.bind(null, task, parentTodoId);
+  const taskName = task.children[1];
+  taskName.onblur = modifyTaskName.bind(null, task, parentTodoId, taskName);
+  taskName.onkeydown = blurOnEnter.bind(null, taskName);
 };
 
 const generateTaskItemHtml = function( parentTodoId, task) {
@@ -59,7 +67,8 @@ const attachHandlersToTodo = function(todo) {
   const newTaskField = todo.lastElementChild;
   newTaskField.onkeydown = addTaskToTodo.bind(null, todo.id, newTaskField);
   const title = getTodoTitle(todo);
-  title.oninput = modifyTodoTitle.bind(null, title, todo.id);
+  title.onblur = modifyTodoTitle.bind(null, title, todo.id);
+  title.onkeydown = blurOnEnter.bind(null, title);
 };
 
 const generateTodoListHtml = function(todoList){

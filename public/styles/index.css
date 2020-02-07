@@ -78,11 +78,17 @@ body{
 }
 
 .todoListHeader  h2 {
-  margin: 0 0 2px;
+  margin: 0;
   font-weight: 100;
   line-height: 28px;
   flex-grow: 1;
   outline: none;
+  border-bottom: 1px solid rgba(255, 255, 255,0);
+}
+
+.todoListHeader  h2:focus {
+  background: rgba(255, 255, 255,0.05);
+  border-bottom: 1px solid white;
 }
 
 .infoStrap {
@@ -130,6 +136,13 @@ body{
   font-weight: 100;
   cursor: text;
   outline: none;
+  border-bottom: 1px solid rgba(141, 141, 141,0);
+
+}
+
+.taskItem > p:focus {
+  background: rgba(0,0,0,0.03);
+  border-bottom: 1px solid rgb(216, 216, 216);
 }
 
 .toDoLists {
