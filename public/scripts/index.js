@@ -15,7 +15,6 @@ const resetTodoSearch = function(){
 
 const filterSearchedTasks = function(){
   const allTasks = getAllTasks();
-  console.log(allTasks);
   allTasks.forEach(task => {
     task.classList.remove('hidden');
     const isMatchedTask = getTaskName(task).innerText.includes(taskSearchBar.value);
@@ -49,13 +48,17 @@ const addTodoListOnEnter = function() {
   }
 };
 
+const stopClickFromGoingToParent = () => event.stopPropagation();
+
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
   addIcon.onclick = focusOnNewTitleField;
   todoSearchIcon.onclick = resetTodoSearch;
   todoSearchBar.onkeyup = filterSearchedTodoLists;
+  todoSearchBar.onclick = stopClickFromGoingToParent;
   taskSearchIcon.onclick = resetTaskSearch;
   taskSearchBar.onkeydown = filterSearchedTasks;
+  taskSearchBar.onclick = stopClickFromGoingToParent;
 };
 
 const loadSavedRecords = function(){
