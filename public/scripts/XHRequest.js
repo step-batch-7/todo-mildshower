@@ -17,11 +17,3 @@ const getDataFromServer = function(targetPath, callBack) {
 const postDataToServer = requestToServer.bind(null, 'POST');
 
 const fetchSavedRecords = getDataFromServer.bind('/records');
-
-const toggleTaskStateOnServer = postDataToServer.bind(null, '/toggleTaskState');
-const modifyTodoTitleOnServer = postDataToServer.bind(null, '/modifyTodoTitle');
-const modifyTaskNameOnServer = postDataToServer.bind(null, '/modifyTaskName');
-const deleteTaskOnServer = postDataToServer.bind(null, '/deleteTask');
-const deleteTodoOnServer = postDataToServer.bind(null, '/deleteTodo');
-const addTaskToTodoOnServer = postDataToServer.bind(null, '/addTask');
-const addTodoListOnServer = postDataToServer.bind(null, '/addTodoList');

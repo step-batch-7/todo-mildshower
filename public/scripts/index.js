@@ -1,64 +1,36 @@
 /* eslint-disable no-undef */
-const filterSearchedTodoLists = function(){
-  const allTodoLists = getAllTodoLists();
-  allTodoLists.forEach(todo => {
-    todo.classList.remove('hidden');
-    const isMatchedTodo = getTodoTitle(todo).innerText.includes(todoSearchBar.value);
-    !isMatchedTodo && todo.classList.add('hidden');
-  });
-};
-
-const resetTodoSearch = function(){
-  focusAndResetTodoSearchField();
-  filterSearchedTodoLists();
-};
-
-const filterSearchedTasks = function(){
-  const allTasks = getAllTasks();
-  allTasks.forEach(task => {
-    task.classList.remove('hidden');
-    const isMatchedTask = getTaskName(task).innerText.includes(taskSearchBar.value);
-    !isMatchedTask && task.classList.add('hidden');
-  });
-};
-
-const resetTaskSearch = function(){
-  focusAndResetTaskSearchField();
-  filterSearchedTasks();
-};
-
-const projectTodoList = function(todoList) {
-  const todoHtml = generateTodoListHtml(todoList);
-  getTodoListsContainer().prepend(todoHtml);
-  todoHtml.lastElementChild.focus();
-};
+const addTodoListOnServer = postDataToServer.bind(null, '/addTodoList');
 
 const restoreTodoAddPanel = function(){
-  removeEnteredValues();
-  collapseNewTitle();
+  newTitle.value = '';
+  addTodoPanel.checked = false;
 };
 
 const addTodoListOnEnter = function() {
   if(event.key === 'Enter' && event.target.value !== '') {
-    const newTodo = getNewTodoListInfo();
-    addTodoListOnServer(newTodo, ({newTodoListId}) => {
-      projectTodoList({title: newTodo.title, id: newTodoListId, tasks: []});
+    const newTodoTitle = newTitle.value;
+    addTodoListOnServer({title: newTodoTitle}, ({newTodoListId}) => {
+      projectTodoList({title: newTodoTitle, id: newTodoListId, tasks: []});
     });
     restoreTodoAddPanel();
   }
 };
 
-const stopClickFromGoingToParent = () => event.stopPropagation();
+const focusOnNewTitleField = function() {
+  setTimeout(() => newTitle.focus(), 100);
+};
+
+const stopEventPropagation = () => event.stopPropagation();
 
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
   addIcon.onclick = focusOnNewTitleField;
   todoSearchIcon.onclick = resetTodoSearch;
   todoSearchBar.onkeyup = filterSearchedTodoLists;
-  todoSearchBar.onclick = stopClickFromGoingToParent;
+  todoSearchBar.onclick = stopEventPropagation;
   taskSearchIcon.onclick = resetTaskSearch;
-  taskSearchBar.onkeydown = filterSearchedTasks;
-  taskSearchBar.onclick = stopClickFromGoingToParent;
+  taskSearchBar.onkeyup = filterSearchedTasks;
+  taskSearchBar.onclick = stopEventPropagation;
 };
 
 const loadSavedRecords = function(){
