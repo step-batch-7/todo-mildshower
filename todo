@@ -16,9 +16,9 @@
 --done-- make todoList title editable
 --done-- make task items editable
 --done-- implement todoList search feature
--- implement task search feature
--- design a login page
--- design a sign up page
+--done-- implement task search feature
+--done-- design a login page
+--done-- design a sign up page
 -- implement login feature
 ---- use cookie implantation and session classes
 ---- use user class to hold user context
