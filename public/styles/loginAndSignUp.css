@@ -106,3 +106,7 @@ a{
 a:hover, a:focus {
   opacity: 1;
 }
+
+.hidden {
+  display: none;
+}

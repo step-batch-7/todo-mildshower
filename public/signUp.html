@@ -4,26 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles/loginAndSignUp.css">
+  <script src="scripts/XHRequest.js"></script>
+  <script src="scripts/signUp.js"></script>
   <title>To-do Login</title>
 </head>
 <body>
   <h2>Account Login</h2>
   <div class="loginBox">
-    <form action="login">
+    <form id="submitForm" action="signUp" method="POST">
       <div class="fieldContainer">
         <img src="images/user.png" height="30px" width="28px">
-        <input name="name" type="text" placeholder="Full Name" autocomplete="off">
+        <input name="name" type="text" placeholder="Full Name" autocomplete="off" required>
       </div>
     <div class="fieldContainer">
       <img src="images/user.png" height="30px" width="28px">
-      <input name="userName" type="text" placeholder="Username" autocomplete="off">
+      <input id="userNameField" name="userName" type="text" placeholder="Username" autocomplete="off" required>
     </div>
-    <div class="alert">
+    <div class="alert hidden" id="warning">
       <p>Entered Username is already taken</p>
     </div>
     <div class="fieldContainer">
       <img src="images/lock.png" height="25px" width="28px">
-      <input name="password" type="password" placeholder="Password">
+      <input name="password" type="password" placeholder="Password" required>
     </div>
       <input class="mainBtn" type="submit" value="Log in">
   </form>
