@@ -15,7 +15,7 @@
   <div class="heading">
   <h1>To-do </h1>
   <input type="checkbox" class="expansionToggler" id="addTodoPanel">
-  <label for="addTodoPanel" id="addIcon">
+  <label for="addTodoPanel" id="addIcon" title="Add To-do">
     <div>
       <input type="text" id="newTitle" placeholder="New To-do Title.."/>
       <div class="add"></div>
@@ -23,7 +23,7 @@
   </label>
 
   <input type="checkbox" class="expansionToggler" id="todoSearchPanel">
-  <label for="todoSearchPanel" id="todoSearchIcon">
+  <label for="todoSearchPanel" id="todoSearchIcon" title="Search Todo">
     <div>
       <input type="text" id="todoSearchBar" placeholder="Search To-do.."/>
       <div class="todoSearch"></div>
@@ -31,12 +31,14 @@
   </label>
 
   <input type="checkbox" class="expansionToggler" id="taskSearchPanel">
-  <label for="taskSearchPanel" id="taskSearchIcon">
+  <label for="taskSearchPanel" id="taskSearchIcon" title="Search Task">
     <div>
       <input type="text" id="taskSearchBar" placeholder="Search Task.."/>
       <div class="taskSearch"></div>
     </div>
   </label>
+
+  <div id="logoutBtn" title="Logout"><div class="logoutIcon"></div></div>
 
 </div>
 <div class="toDoLists">

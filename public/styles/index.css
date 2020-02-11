@@ -187,6 +187,11 @@ body{
   display: none;
 }
 
+.logoutIcon{
+  height: 20px;
+  content:  url(../images/logout.png);
+}
+
 .add{
   height: 20px;
   content:  url(../images/add.png);
@@ -215,7 +220,8 @@ body{
   transition: 200ms;
 }
 
-.expansionToggler + label > div{
+.expansionToggler + label > div, 
+#logoutBtn {
   background: linear-gradient(45deg,rgb(63, 135, 194),rgb(98, 83, 231));
   margin: 0 5px 0 20px;
   border-radius: 25px;

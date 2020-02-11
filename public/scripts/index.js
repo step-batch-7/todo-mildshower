@@ -22,6 +22,12 @@ const focusOnNewTitleField = function() {
 
 const stopEventPropagation = () => event.stopPropagation();
 
+const logout = function(){
+  console.log('hi');
+  document.cookie = '_SID=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+  location.assign('login.html');
+};
+
 const attachEventHandlers = function(){
   newTitle.onkeydown = addTodoListOnEnter;
   addIcon.onclick = focusOnNewTitleField;
@@ -31,6 +37,7 @@ const attachEventHandlers = function(){
   taskSearchIcon.onclick = resetTaskSearch;
   taskSearchBar.onkeyup = filterSearchedTasks;
   taskSearchBar.onclick = stopEventPropagation;
+  logoutBtn.onclick = logout;
 };
 
 const loadSavedRecords = function(){
