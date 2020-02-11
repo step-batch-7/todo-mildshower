@@ -23,6 +23,6 @@
 --done---- use cookie implantation and session classes
 --done---- use user class to hold user context
 --done---- use cookies to determine session and ask for login if not logged in
--- make logout feature
--- directly login when signing up
+--done-- make logout feature
+--done-- directly login when signing up
 ...
