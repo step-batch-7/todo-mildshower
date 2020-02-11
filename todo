@@ -19,8 +19,10 @@
 --done-- implement task search feature
 --done-- design a login page
 --done-- design a sign up page
--- implement login feature
----- use cookie implantation and session classes
----- use user class to hold user context
----- use cookies to determine session and ask for login if not logged in
+--done-- implement login feature
+--done---- use cookie implantation and session classes
+--done---- use user class to hold user context
+--done---- use cookies to determine session and ask for login if not logged in
+-- make logout feature
+-- directly login when signing up
 ...

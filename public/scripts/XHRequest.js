@@ -6,11 +6,10 @@ const requestToServer = function(method, targetPath, data, callBack) {
   request.responseType = 'json';
   data && request.setRequestHeader('Content-Type', 'application/json');
   request.onload = function(){
-    // if(this.status === 302){
-    //   console.log('hi');
-    //   location.assign(this.getResponseHeader('location'));
-    //   return;
-    // }
+    if(this.status === 401){
+      location.assign('/login.html');
+      return;
+    }
     callBack && callBack(this.response, this.status);
   };
   request.send(data && JSON.stringify(data));
